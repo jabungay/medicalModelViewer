@@ -1,0 +1,17 @@
+{
+  "splitter":{
+    "name":"Splitter",
+    "description":"A y-valve used for catheters.",
+    "files":["splitter.stl", "valve.stl"]
+  },
+  "mount":{
+    "name":"Mount",
+    "description":"A mount used to extend a Geeetech 3D printer bed.",
+    "files":["mount.stl"]
+  },
+  "cube":{
+    "name":"Cube",
+    "description":"Just a small cube.",
+    "files":["cube.stl"]
+  }
+}
