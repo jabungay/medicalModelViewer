@@ -5,15 +5,18 @@ var modelPos;
 
 var cameraPos;
 
-var loadedFile = "data/mount.stl";
+var loadedFile = "data/cube.stl";
 var sel;
 
 var graphics;
 
 var data;
 
+var obj;
+
 function preload() {
   data = loadJSON("data/files.json");
+  obj = loadModel("data/cube.obj");
 }
 
 function setup() {
@@ -40,6 +43,8 @@ function setup() {
 
   loadSTL(loadedFile);
 }
+
+var done = false;
 
 function draw() {
   background(55);
@@ -69,7 +74,19 @@ function draw() {
     }
   }
 
-  displaySTL(result);
+  if(result != undefined && done == false) {
+    // result.computeNormals();
+    done = true;
+    print(result);
+      print(obj);
+  } else if (done == true) {
+
+     graphics.model(result);
+  }
+
+
+  //
+  // graphics.model(obj);
 
   image(graphics, 0, 0);
 }

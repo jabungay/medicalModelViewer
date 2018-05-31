@@ -45,8 +45,7 @@ function hexToFloat(hex) {
 }
 
 function loadSTLModel(path){
-  var model = new p5.Geometry();
-  
+
 }
 
 /********************************************
@@ -91,7 +90,33 @@ function parseSTL(data) {
       append(vertices, vertex);
     }
   }
-  result = vertices;
+
+
+  var face = [];
+  var model = new p5.Geometry();
+  model.gid = "test";
+
+  for (var i = 0; i < vertices.length / 3; i++) {
+    var start = i * 3;
+    face.push(start);
+    face.push(start + 1);
+    face.push(start + 2);
+    for (var j = start; j < start + 3; j++) {
+      model.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+      model.uvs.push([0,0]);
+    }
+    model.faces.push(face);
+    face = [];
+  }
+
+  if (model.vertexNormals.length === 0) {
+    model.computeNormals();
+  }
+
+
+  result = model;
+
+
 }
 
 /********************************************
