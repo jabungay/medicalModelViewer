@@ -1,11 +1,10 @@
-
 var modelScale = 4;
 var modelAngle;
 var modelPos;
 
 var cameraPos;
 
-var loadedFile = "data/mount.stl";
+var loadedFile = "data/splitter.stl";
 var sel;
 
 var graphics;
@@ -45,9 +44,11 @@ function setup() {
 function draw() {
   background(55);
 
-  graphics.background(200);
-  graphics.fill(121, 162, 229);
-  graphics.stroke(0);
+  graphics.background(128);
+  // graphics.fill(121, 162, 229);
+  graphics.noStroke(0);
+  graphics.ambientMaterial(121, 162, 229);
+
 
   graphics.camera(cameraPos.x, cameraPos.y, cameraPos.z, 0, 0, 0, 0, 1, 0);
 
@@ -55,10 +56,16 @@ function draw() {
     modelScale = 1;
   }
 
+  graphics.pointLight(250,250,250, 0, 2000, 100);
+    graphics.pointLight(250,250,250, 0, -2000, 100);
+
   graphics.scale(modelScale);
   graphics.translate(modelPos.x, modelPos.y);
   graphics.rotateX(modelAngle.y);
   graphics.rotateY(modelAngle.x);
+
+
+
 
   if (mouseIsPressed) {
     if (mouseButton == LEFT) {
