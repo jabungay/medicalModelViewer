@@ -11,7 +11,7 @@ var sel;
 var graphics;
 
 var data;
-var object;
+var model;
 
 function preload() {
   data = loadJSON("data/files.json");
@@ -39,7 +39,7 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  loadSTL(loadedFile);
+  model = loadSTL(loadedFile);
 }
 
 function draw() {
@@ -70,9 +70,7 @@ function draw() {
     }
   }
 
-  try {
-    graphics.model(object);
-  } catch (err) {}
+  graphics.model(model);
 
   image(graphics, 0, 0);
 }
@@ -86,8 +84,7 @@ function windowResized() {
 
 function swapFiles() {
   loadedFile = "data/" + data[sel.value()].files[0];
-  print(loadedFile);
-  loadSTL(loadedFile);
+  model = loadSTL(loadedFile);
 }
 
 function download() {

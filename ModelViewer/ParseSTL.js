@@ -1,5 +1,3 @@
-var result;
-
 /********************************************
 * get4Byte: gets 4 "bytes" (stored in an array
 * as decimals) and converts them to a string
@@ -53,6 +51,9 @@ function hexToFloat(hex) {
 * TODO: Add ASCII STL parsing functionality
 ********************************************/
 function loadSTL(file) {
+
+  var model = new p5.Geometry();
+
   var data = loadBytes(file, function(data) {
     var bytes = Array.from(data.bytes);
 
@@ -77,9 +78,8 @@ function loadSTL(file) {
       }
     }
 
-
     var face = [];
-    var model = new p5.Geometry();
+
     model.gid = file;
 
     for (var i = 0; i < vertices.length / 3; i++) {
@@ -98,8 +98,7 @@ function loadSTL(file) {
     if (model.vertexNormals.length === 0) {
       model.computeNormals();
     }
-
-    object = model;
-    
   });
+  print(model);
+  return model;
 }
