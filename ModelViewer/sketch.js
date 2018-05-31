@@ -5,21 +5,20 @@ var modelPos;
 
 var cameraPos;
 
-var loadedFile = "data/cube.stl";
+var loadedFile = "data/mount.stl";
 var sel;
 
 var graphics;
 
 var data;
-
-var obj;
+var object;
 
 function preload() {
   data = loadJSON("data/files.json");
 }
 
 function setup() {
-  cnv = createCanvas(windowWidth, windowHeight);
+  cnv = createCanvas(windowWidth - 20, windowHeight - 20);
   graphics = createGraphics(windowWidth / 2, windowWidth / 2, WEBGL);
 
 
@@ -42,8 +41,6 @@ function setup() {
 
   loadSTL(loadedFile);
 }
-
-var done = false;
 
 function draw() {
   background(55);
@@ -73,25 +70,15 @@ function draw() {
     }
   }
 
-  if(result != undefined && done == false) {
-    // result.computeNormals();
-    done = true;
-    print(result);
-      print(obj);
-  } else if (done == true) {
-
-     graphics.model(result);
-  }
-
-
-  //
-  // graphics.model(obj);
+  try {
+    graphics.model(object);
+  } catch (err) {}
 
   image(graphics, 0, 0);
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowWidth - 20, windowHeight - 20);
   graphics.resizeCanvas(windowWidth / 2, windowWidth / 2);
   graphics.width = windowWidth / 2;
   graphics.height = windowWidth / 2;
@@ -99,6 +86,7 @@ function windowResized() {
 
 function swapFiles() {
   loadedFile = "data/" + data[sel.value()].files[0];
+  print(loadedFile);
   loadSTL(loadedFile);
 }
 

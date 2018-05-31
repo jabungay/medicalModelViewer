@@ -44,99 +44,62 @@ function hexToFloat(hex) {
   return result;
 }
 
-function loadSTLModel(path){
-
-}
-
 /********************************************
-* loadSTL: acts as a buffer for parseSTL,
-* waits until bytes are fully loaded.
-* @param file: the STL file
-* TODO: make the function test whether the
-* file actually ends in ".stl"
-********************************************/
-function loadSTL(file) {
-  var data = loadBytes(file, parseSTL);
-}
-
-/********************************************
-* parseSTL: generates an array of points from
+* loadSTL: generates an array of points from
 * the bytes of an STL file.
-* @param data: the bytes from loadSTL
+* @param file: the STL file
 * @modifies the result array
 * TODO: Create a JSON file structure
 * TODO: Add ASCII STL parsing functionality
 ********************************************/
-function parseSTL(data) {
-  var bytes = Array.from(data.bytes);
+function loadSTL(file) {
+  var data = loadBytes(file, function(data) {
+    var bytes = Array.from(data.bytes);
 
-  var offset = 84;
-  var faces = parseInt(get4Byte(bytes, 80, true), 16);
-  var vertices = [];
+    var offset = 84;
+    var faces = parseInt(get4Byte(bytes, 80, true), 16);
+    var vertices = [];
 
-  for(var face = 0; face < faces; face++) {
-    normal = [];
-    var index = offset + 50 * face;
-    append(normal, hexToFloat(get4Byte(bytes, index, true)));
-    append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
-    append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
+    for(var face = 0; face < faces; face++) {
+      normal = [];
+      var index = offset + 50 * face;
+      append(normal, hexToFloat(get4Byte(bytes, index, true)));
+      append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
+      append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
 
-    for(var i = 0; i < 3; i++) {
-      var vertex = [];
-      var vertexStart = index + 12 + i * 12;
-      append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
-      append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
-      append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
-      append(vertices, vertex);
-    }
-  }
-
-
-  var face = [];
-  var model = new p5.Geometry();
-  model.gid = "test";
-
-  for (var i = 0; i < vertices.length / 3; i++) {
-    var start = i * 3;
-    face.push(start);
-    face.push(start + 1);
-    face.push(start + 2);
-    for (var j = start; j < start + 3; j++) {
-      model.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
-      model.uvs.push([0,0]);
-    }
-    model.faces.push(face);
-    face = [];
-  }
-
-  if (model.vertexNormals.length === 0) {
-    model.computeNormals();
-  }
-
-
-  result = model;
-
-
-}
-
-/********************************************
-* displaySTL: draw the parsed STL vertices to
-* the screen as a series of triangles.
-* @param vertices: the vertices of the model
-* @modifies the model on the screen
-* TODO: get rid of this function and just put
-* the vertices into a p5.Geometry object
-********************************************/
-function displaySTL(vertices) {
-  if (vertices != undefined) {
-    var faces = vertices.length / 3;
-    for (var face = 0; face < faces; face++) {
-      graphics.beginShape();
-      for (var point = 0; point < 3; point++){
-        var index = face * 3 + point;
-        graphics.vertex(vertices[index][0], vertices[index][1], vertices[index][2]);
+      for(var i = 0; i < 3; i++) {
+        var vertex = [];
+        var vertexStart = index + 12 + i * 12;
+        append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
+        append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
+        append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
+        append(vertices, vertex);
       }
-      graphics.endShape();
     }
-  }
+
+
+    var face = [];
+    var model = new p5.Geometry();
+    model.gid = file;
+
+    for (var i = 0; i < vertices.length / 3; i++) {
+      var start = i * 3;
+      face.push(start);
+      face.push(start + 1);
+      face.push(start + 2);
+      for (var j = start; j < start + 3; j++) {
+        model.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+        model.uvs.push([0,0]);
+      }
+      model.faces.push(face);
+      face = [];
+    }
+
+    if (model.vertexNormals.length === 0) {
+      model.computeNormals();
+    }
+
+    object = model;
+    
+  });
 }
