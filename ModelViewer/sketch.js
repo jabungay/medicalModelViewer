@@ -16,7 +16,6 @@ var obj;
 
 function preload() {
   data = loadJSON("data/files.json");
-  obj = loadModel("data/cube.obj");
 }
 
 function setup() {
