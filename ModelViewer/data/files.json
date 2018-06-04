@@ -16,5 +16,11 @@
     "author":"Anonymous",
     "description":"Just a small cube.",
     "files":["cube.stl"]
+  },
+  "pad":{
+    "name":"Pad",
+    "author":"Jack Chapman",
+    "description":"",
+    "files":["pad.stl"]
   }
 }
