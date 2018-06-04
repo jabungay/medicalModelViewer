@@ -1,5 +1,5 @@
 // Model variables
-var loadedFile = "data/splitter.stl";
+var loadedFile = "splitter";
 var model;
 var modelScale = 20;
 var modelAngle;
