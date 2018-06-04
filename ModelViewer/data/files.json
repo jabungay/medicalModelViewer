@@ -1,16 +1,19 @@
 {
   "splitter":{
     "name":"Splitter",
+    "author":"Jonathan Bungay",
     "description":"A y-valve used for catheters.",
     "files":["splitter.stl", "valve.stl"]
   },
   "mount":{
     "name":"Mount",
+    "author":"Jonathan Bungay",
     "description":"A mount used to extend a Geeetech 3D printer bed.",
     "files":["mount.stl"]
   },
   "cube":{
     "name":"Cube",
+    "author":"Anonymous",
     "description":"Just a small cube.",
     "files":["cube.stl"]
   }
