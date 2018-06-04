@@ -1,0 +1,12 @@
+- Add a list of all files, so that one can be chosen to display
+- Download button
+- Improve camera alignment for models
+- Add some sort of visually appealing theme
+- Show model metadata: author, name, parts, etc.
+- Download counter
+- When a model is loaded, load all its metadata into different variables
+- For multiple object models, allow the viewing of different models (either all together or as different files)
+- Load all buttons from buttons.json into the button array on start (preload probably)
+- Uploading new files
+- User accounts, security
+- Look into moving from javascript to CSS for formatting
