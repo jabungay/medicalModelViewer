@@ -8,6 +8,7 @@ var onModel;
 
 // JSON object of models
 var data;
+var buttons;
 
 // Array of buttons
 var buttonList = [];

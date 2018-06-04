@@ -1,13 +1,13 @@
 function preload() {
   data = loadJSON("data/files.json");
+  buttons = loadJSON("data/buttons.json");
 }
 
 function setup() {
   cnv = createCanvas(window.screen.width / 3, 4000);
   graphics = createGraphics(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
-  append(buttonList, new Button("test", 100, 100, 100, 50));
-
+  loadButtons();
 
   modelPos = createVector(-50, -50);
   modelAngle = createVector(5.506, 2.264);
@@ -41,10 +41,9 @@ function draw() {
   graphics.rotateX(modelAngle.y);
   graphics.rotateY(modelAngle.x);
 
-
-  // buttonList.forEach(function(button) {
-  //   button.draw();
-  // });
+  buttonList.forEach(function(button) {
+    button.draw();
+  });
 
   graphics.model(model);
 
@@ -53,19 +52,31 @@ function draw() {
   push();
   fill(255);
   textSize(32);
-  text(data[loadedFile].name, 100, graphics.height+100);
+  text(data[loadedFile].name, 500, graphics.height + 50);
   pop();
 
   changeScroll();
 }
 
-function swapFiles() {
-  loadedFile = "data/" + "cube.stl";
-  model = loadSTL(loadedFile);
+function download() {
+  for (var i = 0; i < data[loadedFile].files.length; i++) {
+    $.fileDownload('http://142.162.132.4:80/ModelViewer/data/' + data[loadedFile].files[i]);
+  }
 }
 
-function download() {
-  for (var i = 0; i < data[sel.value()].files.length; i++) {
-    $.fileDownload('http://142.162.132.4:80/ModelViewer/data/' + data[sel.value()].files[i]);
+function loadButtons() {
+  buttons = buttons["buttons"];
+  buttons.forEach(function(button) {
+    append(buttonList, new Button(button.id, button.xPos, button.yPos, button.width, button.height, color(255), button.text));
+  });
+  var x = 20;
+  for (file in data) {
+    append(buttonList, new Button(file, x, 100, 120, 50, color(255), data[file].name));
+    x += 150;
   }
+}
+
+function loadFile(file) {
+  loadedFile = file;
+  model = loadSTL("data/" + loadedFile + ".stl");
 }
