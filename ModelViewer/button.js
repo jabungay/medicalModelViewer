@@ -1,13 +1,23 @@
 class Button {
-  constructor(xPos, yPos, wid, hei) {
+  constructor(id, xPos, yPos, wid, hei, colour = color(255), text = "") {
+    this.id = id;
     this.xPos = xPos;
-    this.yPos = yPos;
+    this.yPos = yPos + graphics.height;
     this.wid = wid;
     this.hei = hei;
+    this.colour = colour
+    this.text = text;
   }
 
   draw() {
-    var offset = graphics.height;
-    rect(this.xPos, this.yPos + offset, this.wid, this.hei);
+    push();
+    fill(this.colour);
+    noStroke();
+    rect(this.xPos, this.yPos, this.wid, this.hei);
+    pop();
+  }
+
+  clicked() {
+    print(this.id);
   }
 }
