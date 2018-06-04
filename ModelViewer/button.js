@@ -11,13 +11,26 @@ class Button {
 
   draw() {
     push();
+    textAlign(LEFT, TOP);
     fill(this.colour);
     noStroke();
     rect(this.xPos, this.yPos, this.wid, this.hei);
+    fill(0);
+    textSize(32);
+    text(this.text, this.xPos, this.yPos + 4);
     pop();
   }
 
   clicked() {
-    print(this.id);
+    switch (this.id) {
+      case "download":
+        download();
+        break;
+      case "swap":
+        break;
+      default:
+        loadFile(this.id);
+        break;
+    }
   }
 }
