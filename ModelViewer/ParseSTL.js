@@ -1,5 +1,3 @@
-var result;
-
 /********************************************
 * get4Byte: gets 4 "bytes" (stored in an array
 * as decimals) and converts them to a string
@@ -45,20 +43,24 @@ function hexToFloat(hex) {
 }
 
 /********************************************
-* loadSTL: generates an array of points from
-* the bytes of an STL file.
+* loadSTL: generates a p5.Geometry object from
+* an STL file.
 * @param file: the STL file
 * @modifies the result array
-* TODO: Create a JSON file structure
 * TODO: Add ASCII STL parsing functionality
 ********************************************/
 function loadSTL(file) {
+
+  var model = new p5.Geometry();
+
   var data = loadBytes(file, function(data) {
     var bytes = Array.from(data.bytes);
 
-    var offset = 84;
     var faces = parseInt(get4Byte(bytes, 80, true), 16);
+    var offset = 84;
+
     var vertices = [];
+    var normals = [];
 
     for(var face = 0; face < faces; face++) {
       normal = [];
@@ -74,12 +76,12 @@ function loadSTL(file) {
         append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
         append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
         append(vertices, vertex);
+        append(normals, normal);
       }
     }
 
-
     var face = [];
-    var model = new p5.Geometry();
+
     model.gid = file;
 
     for (var i = 0; i < vertices.length / 3; i++) {
@@ -89,6 +91,7 @@ function loadSTL(file) {
       face.push(start + 2);
       for (var j = start; j < start + 3; j++) {
         model.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+        model.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
         model.uvs.push([0,0]);
       }
       model.faces.push(face);
@@ -98,8 +101,6 @@ function loadSTL(file) {
     if (model.vertexNormals.length === 0) {
       model.computeNormals();
     }
-
-    object = model;
-    
   });
+  return model;
 }
