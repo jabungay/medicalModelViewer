@@ -1,17 +1,18 @@
+// Model variables
+var loadedFile = "data/splitter.stl";
+var model;
 var modelScale = 20;
 var modelAngle;
 var modelPos;
+var onModel;
 
-var cameraPos;
-
-var loadedFile = "data/splitter.stl";
-var sel;
-
-var graphics;
-
+// JSON object of models
 var data;
-var model;
 
-var testButton;
+// Array of buttons
+var buttonList = [];
+
+// WEBGL graphics buffer
+var graphics;
 
 var scrollEnabled = true;
