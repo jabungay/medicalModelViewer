@@ -64,7 +64,6 @@ function loadSTL(file) {
     var vertices = [];
     var normals = [];
     var faces = 0;
-<<<<<<< HEAD
 
     if (ascii) {
       var strings = "";
@@ -105,47 +104,6 @@ function loadSTL(file) {
         append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
         append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
 
-=======
-
-    if (ascii) {
-      var strings = "";
-      bytes.forEach(function(byte){
-        strings += String.fromCharCode(byte);
-      });
-      strings = strings.split('\n');
-      strings.forEach(function(line) {
-        var parts = line.split(" ");
-        if (line.includes("facet normal")) {
-          var normal = [];
-          for (var i = parts.length - 3; i < parts.length; i++) {
-            append(normal, parseFloat(parts[i]));
-          }
-          append(normals, normal);
-          append(normals, normal);
-          append(normals, normal);
-          faces++;
-        } else if (line.includes("vertex")) {
-          var vertex = [];
-          for (var i = parts.length - 3; i < parts.length; i++) {
-            append(vertex, parseFloat(parts[i]));
-          }
-          append(vertices, vertex);
-        }
-      });
-      print(normals);
-      print(vertices);
-    } else {
-      faces = parseInt(get4Byte(bytes, 80, true), 16);
-      var offset = 84;
-
-      for(var face = 0; face < faces; face++) {
-        normal = [];
-        var index = offset + 50 * face;
-        append(normal, hexToFloat(get4Byte(bytes, index, true)));
-        append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
-        append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
-
->>>>>>> 1b32c3ce54db6f5c6b33a215841bea060baff48b
         for(var i = 0; i < 3; i++) {
           var vertex = [];
           var vertexStart = index + 12 + i * 12;
