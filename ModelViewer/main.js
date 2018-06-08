@@ -15,7 +15,7 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  model = loadSTL("data/" + loadedFile + ".stl");
+  model = loadSTL("data/" + "ASCIICube" + ".stl");
 }
 
 function draw() {

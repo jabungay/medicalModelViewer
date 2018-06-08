@@ -47,41 +47,76 @@ function hexToFloat(hex) {
 * an STL file.
 * @param file: the STL file
 * @modifies the result array
-* TODO: Add ASCII STL parsing functionality
 ********************************************/
 function loadSTL(file) {
-
   var model = new p5.Geometry();
 
-  var data = loadBytes(file, function(data) {
-    var bytes = Array.from(data.bytes);
+  var ascii = false;
 
-    var faces = parseInt(get4Byte(bytes, 80, true), 16);
-    var offset = 84;
+  var data = loadBytes(file, function(data) {
+  var bytes = Array.from(data.bytes);
+
+    // Check to see if the first 5 chars of the array are 'solid'
+    if (bytes.slice(0,5).toString() == [115, 111, 108, 105, 100].toString()) {
+      ascii = true;
+    }
 
     var vertices = [];
     var normals = [];
+    var faces = 0;
 
-    for(var face = 0; face < faces; face++) {
-      normal = [];
-      var index = offset + 50 * face;
-      append(normal, hexToFloat(get4Byte(bytes, index, true)));
-      append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
-      append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
+    if (ascii) {
+      var strings = "";
+      bytes.forEach(function(byte){
+        strings += String.fromCharCode(byte);
+      });
+      strings = strings.split('\n');
+      strings.forEach(function(line) {
+        var parts = line.split(" ");
+        if (line.includes("facet normal")) {
+          var normal = [];
+          for (var i = parts.length - 3; i < parts.length; i++) {
+            append(normal, parseFloat(parts[i]));
+          }
 
-      for(var i = 0; i < 3; i++) {
-        var vertex = [];
-        var vertexStart = index + 12 + i * 12;
-        append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
-        append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
-        append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
-        append(vertices, vertex);
-        append(normals, normal);
+          // 3x Because we have face normals but want
+          // vertex normals
+          append(normals, normal);
+          append(normals, normal);
+          append(normals, normal);
+          faces++;
+        } else if (line.includes("vertex")) {
+          var vertex = [];
+          for (var i = parts.length - 3; i < parts.length; i++) {
+            append(vertex, parseFloat(parts[i]));
+          }
+          append(vertices, vertex);
+        }
+      });
+    } else {
+      faces = parseInt(get4Byte(bytes, 80, true), 16);
+      var offset = 84;
+
+      for(var face = 0; face < faces; face++) {
+        normal = [];
+        var index = offset + 50 * face;
+        append(normal, hexToFloat(get4Byte(bytes, index, true)));
+        append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
+        append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
+
+        for(var i = 0; i < 3; i++) {
+          var vertex = [];
+          var vertexStart = index + 12 + i * 12;
+          append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
+          append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
+          append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
+          append(vertices, vertex);
+          append(normals, normal);
+        }
       }
     }
 
     var face = [];
-
     model.gid = file;
 
     for (var i = 0; i < vertices.length / 3; i++) {
