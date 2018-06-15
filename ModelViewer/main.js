@@ -4,56 +4,56 @@ function preload() {
 }
 
 function setup() {
-  cnv = createCanvas(window.screen.width / 3, 4000);
-  graphics = createGraphics(window.screen.width / 3, window.screen.width / 3, WEBGL);
+  // cnv = createCanvas(window.screen.width / 3, 4000);
+  graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
   loadButtons();
 
-  modelPos = createVector(-50, -50);
+  modelPos = createVector(0, 0);
   modelAngle = createVector(5.506, 2.264);
 
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  model = loadSTL("data/" + "ASCIICube" + ".stl");
+  object = loadSTL("data/" + "splitter" + ".stl");
 }
 
 function draw() {
   background(55);
 
-  onModel = (mouseX > 0 && mouseX < graphics.width && mouseY > 0 && mouseY < graphics.height);
+  onModel = (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height);
 
-  graphics.background(128);
-  graphics.noStroke(0);
-  graphics.ambientMaterial(121, 162, 229);
+  background(128);
+  noStroke(0);
+  ambientMaterial(121, 162, 229);
 
-  graphics.camera(0, 0, (height/2.0) / tan(PI*30.0 / 180.0), 0, 0, 0, 0, 1, 0);
+  camera(0, 0, (height/2.0) / tan(PI*30.0 / 180.0), 0, 0, 0, 0, 1, 0);
 
   if (modelScale < 1) {
     modelScale = 1;
   }
 
-  graphics.pointLight(250,250,250, 0, 2000, 100);
-  graphics.pointLight(250,250,250, 0, -2000, 100);
+  directionalLight(250,250,250, 431, 253, 0);
+  directionalLight(250,250,250, -431, 253, 0);
+  directionalLight(250,250,250, -431, -253, 0);
+  directionalLight(250,250,250, 431, -253, 0);
 
-  graphics.scale(modelScale);
-  graphics.translate(modelPos.x, modelPos.y);
-  graphics.rotateX(modelAngle.y);
-  graphics.rotateY(modelAngle.x);
+  scale(modelScale);
+  translate(modelPos.x, modelPos.y);
+  rotateX(modelAngle.y);
+  rotateY(modelAngle.x);
 
-  buttonList.forEach(function(button) {
-    button.draw();
-  });
+  // buttonList.forEach(function(button) {
+  //   button.draw();
+  // });
 
-  graphics.model(model);
+  model(object);
 
-  image(graphics, 0, 0);
-
-  push();
-  fill(255);
-  textSize(32);
-  text(data[loadedFile].name, 500, graphics.height + 50);
-  pop();
+  // push();
+  // fill(255);
+  // textSize(32);
+  // text(data[loadedFile].name, 500, height + 50);
+  // pop();
 
   changeScroll();
 }
@@ -78,5 +78,5 @@ function loadButtons() {
 
 function loadFile(file) {
   loadedFile = file;
-  model = loadSTL("data/" + loadedFile + ".stl");
+  object = loadSTL("data/" + loadedFile + ".stl");
 }
