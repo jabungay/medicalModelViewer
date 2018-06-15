@@ -4,10 +4,18 @@ function preload() {
 }
 
 function setup() {
-  // cnv = createCanvas(window.screen.width / 3, 4000);
   graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
   loadButtons();
+  btDownload = createButton('Download');
+  btDownload.mousePressed(downloadFiles);
+
+  dropdown = createSelect();
+  for (part in data) {
+    dropdown.option(part);
+  }
+
+  dropdown.changed(loadFile);
 
   modelPos = createVector(0, 0);
   modelAngle = createVector(5.506, 2.264);
@@ -58,7 +66,7 @@ function draw() {
   changeScroll();
 }
 
-function download() {
+function downloadFiles() {
   for (var i = 0; i < data[loadedFile].files.length; i++) {
     $.fileDownload('http://142.162.132.4:80/ModelViewer/data/' + data[loadedFile].files[i]);
   }
@@ -76,7 +84,7 @@ function loadButtons() {
   }
 }
 
-function loadFile(file) {
-  loadedFile = file;
+function loadFile() {
+  loadedFile = dropdown.value();
   object = loadSTL("data/" + loadedFile + ".stl");
 }

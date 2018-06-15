@@ -4,10 +4,10 @@
 * depending on what the aspect ratio of the screen is
 ******************************************************/
 function windowResized() {
-  resizeCanvas(window.screen.width / 3, windowHeight - 20);
-  graphics.resizeCanvas(window.screen.width / 3, window.screen.width / 3);
-  graphics.width = window.screen.width / 3;
-  graphics.height = window.screen.width / 3;
+  // resizeCanvas(window.screen.width / 3, windowHeight - 20);
+  // graphics.resizeCanvas(window.screen.width / 3, window.screen.width / 3);
+  // graphics.width = window.screen.width / 3;
+  // graphics.height = window.screen.width / 3;
 }
 
 // Rotate or translate the model if the mouse is on the graphics window

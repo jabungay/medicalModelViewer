@@ -1,7 +1,7 @@
 // Model variables
 var loadedFile = "splitter";
 var object;
-var modelScale = 20;
+var modelScale = 15;
 var modelAngle;
 var modelPos;
 var onModel;
@@ -17,3 +17,5 @@ var buttonList = [];
 var graphics;
 
 var scrollEnabled = true;
+
+var dropdown;
