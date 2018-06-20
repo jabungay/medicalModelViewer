@@ -19,3 +19,6 @@ var graphics;
 var scrollEnabled = true;
 
 var dropdown;
+
+// Whether or not we're local
+var currentLocation = "localhost:8080";
