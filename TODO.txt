@@ -1,5 +1,3 @@
-- Add a list of all files, so that one can be chosen to display
-- Improve camera alignment and lighting for models
 - Add some sort of visually appealing theme
 - Show model metadata: author, name, parts, etc.
 - Download counter
@@ -7,4 +5,3 @@
 - For multiple object models, allow the viewing of different models (either all together or as different files)
 - Uploading new files
 - User accounts, security
-- Look into moving from javascript to CSS for formatting
