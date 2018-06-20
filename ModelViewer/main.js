@@ -1,21 +1,29 @@
 function preload() {
   data = loadJSON("data/files.json");
-  buttons = loadJSON("data/buttons.json");
 }
 
 function setup() {
+
+  btBack = createButton("Back");
+  btBack.mousePressed(function() {
+    window.location.href = "http://" + currentLocation + "/..";
+  });
+
   graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
-  loadButtons();
   btDownload = createButton('Download');
   btDownload.mousePressed(downloadFiles);
+    print(Object.keys(data).length);
 
   dropdown = createSelect();
   for (part in data) {
-    dropdown.option(part);
-  }
 
+    dropdown.option(data[part].name);
+  }
   dropdown.changed(loadFile);
+
+  btUpload = createButton("Upload File");
+  btUpload.mousePressed(uploadFiles);
 
   modelPos = createVector(0, 0);
   modelAngle = createVector(5.506, 2.264);
@@ -51,37 +59,21 @@ function draw() {
   rotateX(modelAngle.y);
   rotateY(modelAngle.x);
 
-  // buttonList.forEach(function(button) {
-  //   button.draw();
-  // });
-
   model(object);
-
-  // push();
-  // fill(255);
-  // textSize(32);
-  // text(data[loadedFile].name, 500, height + 50);
-  // pop();
 
   changeScroll();
 }
 
 function downloadFiles() {
   for (var i = 0; i < data[loadedFile].files.length; i++) {
-    $.fileDownload('http://142.162.132.4:80/ModelViewer/data/' + data[loadedFile].files[i]);
+    $.fileDownload('http://' + currentLocation + '/ModelViewer/data/' + data[loadedFile].files[i]);
   }
 }
 
-function loadButtons() {
-  buttons = buttons["buttons"];
-  buttons.forEach(function(button) {
-    append(buttonList, new Button(button.id, button.xPos, button.yPos, button.width, button.height, color(255), button.text));
-  });
-  var x = 20;
-  for (file in data) {
-    append(buttonList, new Button(file, x, 100, 120, 50, color(255), data[file].name));
-    x += 150;
-  }
+// Redirect to new page for file upload
+//TODO: Look into making this a popup of some sort
+function uploadFiles() {
+  window.location.href = "http://" + currentLocation + "/ModelViewer/SelectFile";
 }
 
 function loadFile() {
