@@ -1,15 +1,3 @@
-/******************************************************
-* Resize the canvas based on the window size
-* TODO: Make the screen always centred and different
-* depending on what the aspect ratio of the screen is
-******************************************************/
-function windowResized() {
-  // resizeCanvas(window.screen.width / 3, windowHeight - 20);
-  // graphics.resizeCanvas(window.screen.width / 3, window.screen.width / 3);
-  // graphics.width = window.screen.width / 3;
-  // graphics.height = window.screen.width / 3;
-}
-
 // Rotate or translate the model if the mouse is on the graphics window
 function mouseDragged() {
   if (onModel) {
@@ -33,9 +21,5 @@ function mouseWheel(event) {
 }
 
 function mouseReleased() {
-  buttonList.forEach(function(button) {
-    if (mouseX > button.xPos && mouseX < button.xPos + button.wid && mouseY > button.yPos && mouseY < button.yPos + button.hei) {
-      button.clicked();
-    }
-  });
+
 }
