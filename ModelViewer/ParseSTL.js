@@ -136,6 +136,6 @@ function loadSTL(file) {
     if (model.vertexNormals.length === 0) {
       model.computeNormals();
     }
-  });
+    });
   return model;
 }
