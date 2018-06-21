@@ -5,3 +5,4 @@
 - For multiple object models, allow the viewing of different models (either all together or as different files)
 - Uploading new files
 - User accounts, security
+- Comments

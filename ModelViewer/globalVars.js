@@ -1,5 +1,5 @@
 // Model variables
-var loadedFile = "splitter";
+var loadedFile = "Splitter";
 var object;
 var modelScale = 15;
 var modelAngle;

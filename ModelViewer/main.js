@@ -1,6 +1,8 @@
 function preload() {
-  data = loadJSON("data/files.json");
+  data = loadJSON("/ModelViewer/data/files.json");
 }
+
+var names = [];
 
 function setup() {
 
@@ -13,13 +15,15 @@ function setup() {
 
   btDownload = createButton('Download');
   btDownload.mousePressed(downloadFiles);
-    print(Object.keys(data).length);
+
+  print(Object.keys(data).length);
 
   dropdown = createSelect();
   for (part in data) {
-
+    names[data[part].name] = part;
     dropdown.option(data[part].name);
   }
+  print(names);
   dropdown.changed(loadFile);
 
   btUpload = createButton("Upload File");
@@ -31,7 +35,9 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  object = loadSTL("data/" + "splitter" + ".stl");
+  object = loadSTL("/ModelViewer/data/" + "splitter" + ".stl");
+
+  print(data[names[loadedFile]]["files"][0]);
 }
 
 function draw() {
@@ -78,5 +84,5 @@ function uploadFiles() {
 
 function loadFile() {
   loadedFile = dropdown.value();
-  object = loadSTL("data/" + loadedFile + ".stl");
+  object = loadSTL("/ModelViewer/data/" + data[names[loadedFile]]["files"][0]);
 }

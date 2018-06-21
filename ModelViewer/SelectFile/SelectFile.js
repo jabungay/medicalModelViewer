@@ -3,7 +3,7 @@ var input;
 var title, author, description;
 
 function preload() {
-  data = loadJSON("../data/files.json");
+  data = loadJSON("/ModelViewer/data/files.json");
 }
 
 function setup() {
@@ -13,26 +13,60 @@ function setup() {
     window.location.href = "http://" + currentLocation + "/ModelViewer";
   });
 
-  input = createUpload();
+  var form = document.createElement("FORM");
+  form.method = "POST"
+  form.action = "upload.php"
+  form.setAttribute("enctype", "multipart/form-data");
 
-  createP("Title:");
-  title = createInput();
-  createP("Author:");
-  author = createInput();
-  createP("Description:");
-  description = createInput();
+  form.appendChild(document.createElement("P").appendChild(document.createTextNode("Title: ")));
 
-  btSubmit = createButton("Submit");
-  btSubmit.mousePressed(uploadFile);
+  var title = document.createElement("INPUT");
+  title.type = "text";
+  title.name = "title";
+  form.appendChild(title);
 
-  input.addEventListener("change", function(){
-    var files = input.files;
-    var reader = new FileReader();
-    reader.onload = function(e){
-      
-    }
-    reader.readAsArrayBuffer(input.files[0]);
-  });
+  form.appendChild(document.createElement("P").appendChild(document.createTextNode("\nAuthor: ")));
+
+
+  var author = document.createElement("INPUT");
+  author.type = "text";
+  author.name = "author";
+  form.appendChild(author);
+
+  form.appendChild(document.createElement("P").appendChild(document.createTextNode("\nDescription: ")));
+
+  var description = document.createElement("TEXTAREA");
+  description.name = "description";
+  form.appendChild(description);
+
+  var fileUpload = document.createElement("INPUT");
+  fileUpload.type = "file";
+  fileUpload.name = "fileToUpload[]";
+  fileUpload.id = "fileToUpload[]";
+  fileUpload.multiple = true;
+  form.appendChild(fileUpload);
+
+  var submit = document.createElement("INPUT");
+  submit.type = "submit";
+  submit.value = "Upload Model";
+  submit.name = "submit";
+  form.appendChild(submit);
+
+  document.body.appendChild(form);
+
+
+  // input = createUpload();
+  //
+  // createP("Title:");
+  // title = createInput();
+  // createP("Author:");
+  // author = createInput();
+  // createP("Description:");
+  // description = createInput();
+  //
+  // btSubmit = createButton("Submit");
+  // btSubmit.mousePressed(uploadFile);
+
 }
 
 
