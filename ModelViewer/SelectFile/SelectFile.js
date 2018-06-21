@@ -18,6 +18,17 @@ function setup() {
   form.action = "upload.php"
   form.setAttribute("enctype", "multipart/form-data");
 
+  var username = document.createElement("INPUT");
+  username.type = "text";
+  username.name = "username";
+  form.appendChild(username);
+
+  var password = document.createElement("INPUT");
+  password.type = "password";
+  password.name = "password";
+  form.appendChild(password);
+
+
   form.appendChild(document.createElement("P").appendChild(document.createTextNode("Title: ")));
 
   var title = document.createElement("INPUT");
@@ -25,7 +36,7 @@ function setup() {
   title.name = "title";
   form.appendChild(title);
 
-  form.appendChild(document.createElement("P").appendChild(document.createTextNode("\nAuthor: ")));
+  form.appendChild(document.createElement("P").appendChild(document.createTextNode("Author: ")));
 
 
   var author = document.createElement("INPUT");
@@ -33,7 +44,7 @@ function setup() {
   author.name = "author";
   form.appendChild(author);
 
-  form.appendChild(document.createElement("P").appendChild(document.createTextNode("\nDescription: ")));
+  form.appendChild(document.createElement("P").appendChild(document.createTextNode("Description: ")));
 
   var description = document.createElement("TEXTAREA");
   description.name = "description";
