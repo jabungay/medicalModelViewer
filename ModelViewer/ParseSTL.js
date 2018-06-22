@@ -116,6 +116,30 @@ function loadSTL(file) {
       }
     }
 
+    var minCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
+
+    // These 2 forEach loops put the model at (0,0,0)
+    vertices.forEach(function(vertex){
+      if (vertex[0] < minCoords.x) {
+        minCoords.x = vertex[0];
+      }
+      if (vertex[1] < minCoords.y) {
+        minCoords.y = vertex[1];
+      }
+      if (vertex[2] < minCoords.z) {
+        minCoords.z = vertex[2];
+      }
+    });
+
+    vertices.forEach(function(vertex){
+      vertex[0] -= minCoords.x;
+      vertex[1] -= minCoords.y;
+      vertex[2] -= minCoords.z;
+    });
+
+    print(vertices);
+    print(minCoords);
+
     var face = [];
     model.gid = file;
 
