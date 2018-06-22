@@ -137,9 +137,6 @@ function loadSTL(file) {
       vertex[2] -= minCoords.z;
     });
 
-    print(vertices);
-    print(minCoords);
-
     var face = [];
     model.gid = file;
 
