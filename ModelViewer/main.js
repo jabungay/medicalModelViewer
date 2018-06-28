@@ -1,69 +1,88 @@
 function preload() {
-  data = loadJSON("data/files.json");
+  data = loadJSON("/ModelViewer/data/files.json");
 }
 
+var names = [];
+
 function setup() {
-  cnv = createCanvas(window.screen.width / 3, 4000);
-  graphics = createGraphics(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
-  testButton = new Button(100,100,100, 50);
+  btBack = createButton("Back");
+  btBack.mousePressed(function() {
+    window.location.href = "http://" + currentLocation + "/..";
+  });
 
-  button = createButton("Download");
-  button.mousePressed(download);
+  graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
-  sel = createSelect();
-  sel.option("mount");
-  sel.option("cube");
-  sel.option("splitter");
-  sel.changed(swapFiles);
+  btDownload = createButton('Download');
+  btDownload.mousePressed(downloadFiles);
 
-  modelPos = createVector(-50, -50);
+  print(Object.keys(data).length);
+
+  dropdown = createSelect();
+  for (part in data) {
+    names[data[part].name] = part;
+    dropdown.option(data[part].name);
+  }
+  print(names);
+  dropdown.changed(loadFile);
+
+  btUpload = createButton("Upload File");
+  btUpload.mousePressed(uploadFiles);
+
+  modelPos = createVector(0, 0);
   modelAngle = createVector(5.506, 2.264);
-
-  cameraPos = createVector(0,0, (height/2.0) / tan(PI*30.0 / 180.0));
 
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  model = loadSTL(loadedFile);
+  object = loadSTL("/ModelViewer/data/" + "splitter" + ".stl");
+
+  print(data[names[loadedFile]]["files"][0]);
 }
 
 function draw() {
   background(55);
 
-  graphics.background(128);
-  graphics.noStroke(0);
-  graphics.ambientMaterial(121, 162, 229);
+  onModel = (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height);
 
-  graphics.camera(cameraPos.x, cameraPos.y, cameraPos.z, 0, 0, 0, 0, 1, 0);
+  background(128);
+  noStroke(0);
+  ambientMaterial(121, 162, 229);
+
+  camera(0, 0, (height/2.0) / tan(PI*30.0 / 180.0), 0, 0, 0, 0, 1, 0);
 
   if (modelScale < 1) {
     modelScale = 1;
   }
 
-  graphics.pointLight(250,250,250, 0, 2000, 100);
-  graphics.pointLight(250,250,250, 0, -2000, 100);
+  directionalLight(250,250,250, 431, 253, 0);
+  directionalLight(250,250,250, -431, 253, 0);
+  directionalLight(250,250,250, -431, -253, 0);
+  directionalLight(250,250,250, 431, -253, 0);
 
-  graphics.scale(modelScale);
-  graphics.translate(modelPos.x, modelPos.y);
-  graphics.rotateX(modelAngle.y);
-  graphics.rotateY(modelAngle.x);
+  scale(modelScale);
+  translate(modelPos.x, modelPos.y);
+  rotateX(modelAngle.y);
+  rotateY(modelAngle.x);
 
-  testButton.draw();
-  graphics.model(model);
+  model(object);
 
-  image(graphics, 0, 0);
-
-  checkMouse();
+  changeScroll();
 }
 
-function swapFiles() {
-  loadedFile = "data/" + data[sel.value()].files[0];
-  model = loadSTL(loadedFile);
-}
-
-function download() {
-  for (var i = 0; i < data[sel.value()].files.length; i++) {
-    $.fileDownload('http://142.162.132.4:80/ModelViewer/data/' + data[sel.value()].files[i]);
+function downloadFiles() {
+  for (var i = 0; i < data[loadedFile].files.length; i++) {
+    $.fileDownload('http://' + currentLocation + '/ModelViewer/data/' + data[loadedFile].files[i]);
   }
+}
+
+// Redirect to new page for file upload
+//TODO: Look into making this a popup of some sort
+function uploadFiles() {
+  window.location.href = "http://" + currentLocation + "/ModelViewer/SelectFile";
+}
+
+function loadFile() {
+  loadedFile = dropdown.value();
+  object = loadSTL("/ModelViewer/data/" + data[names[loadedFile]]["files"][0]);
 }
