@@ -5,6 +5,7 @@ function preload() {
 var names = [];
 
 function setup() {
+  currentLocation = window.location.href.split("/")[2];
 
   btBack = createButton("Back");
   btBack.mousePressed(function() {
@@ -79,7 +80,7 @@ function downloadFiles() {
 // Redirect to new page for file upload
 //TODO: Look into making this a popup of some sort
 function uploadFiles() {
-  window.location.href = "http://" + currentLocation + "/ModelViewer/SelectFile";
+  window.location.href = window.location.href + "/SelectFile";
 }
 
 function loadFile() {

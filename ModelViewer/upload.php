@@ -29,8 +29,8 @@ if ($_POST["username"] == "med3dnetwork" && $_POST["password"] == "Medicine2018"
   for ($i = 0; $i < $total; $i++) {
     $file_type = end(explode(".",$_FILES["fileToUpload"]["name"][$i]));
     $id = $time . "_" . $number;
-    $file_name = $id . "_" . $i . "." . $file_type;
-    $target_file = $target_dir . $file_name;
+    $file_name = $i . "." . $file_type;
+    $target_file = $target_dir . $id . "/" . $file_name;
 
     // if ($_FILES["fileToUpload"]["size"][$i] > 500000) {
     //   $uploadOk = 0;
@@ -41,6 +41,10 @@ if ($_POST["username"] == "med3dnetwork" && $_POST["password"] == "Medicine2018"
     }
 
     if ($uploadOk) {
+
+      mkdir($target_dir . $id);
+
+
       $files[$i] = $file_name;
       move_uploaded_file($_FILES["fileToUpload"]["tmp_name"][$i], $target_file);
       // echo "Upload Done! ";

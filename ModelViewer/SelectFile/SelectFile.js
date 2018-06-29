@@ -7,6 +7,8 @@ function preload() {
 }
 
 function setup() {
+  currentLocation = window.location.href.split("/")[2];
+
   btBack = createButton("Back");
   btBack.position(0,0);
   btBack.mousePressed(function() {
@@ -64,20 +66,6 @@ function setup() {
   form.appendChild(submit);
 
   document.body.appendChild(form);
-
-
-  // input = createUpload();
-  //
-  // createP("Title:");
-  // title = createInput();
-  // createP("Author:");
-  // author = createInput();
-  // createP("Description:");
-  // description = createInput();
-  //
-  // btSubmit = createButton("Submit");
-  // btSubmit.mousePressed(uploadFile);
-
 }
 
 
