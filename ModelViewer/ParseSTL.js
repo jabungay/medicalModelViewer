@@ -117,8 +117,10 @@ function loadSTL(file) {
     }
 
     var minCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
+    var maxCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
 
-    // These 2 forEach loops put the model at (0,0,0)
+
+    // These 2 forEach loops put the model at (0,0,0) and normalize its dimensions
     vertices.forEach(function(vertex){
       if (vertex[0] < minCoords.x) {
         minCoords.x = vertex[0];
@@ -129,12 +131,43 @@ function loadSTL(file) {
       if (vertex[2] < minCoords.z) {
         minCoords.z = vertex[2];
       }
+
+      if (vertex[0] > maxCoords.x) {
+        minCoords.x = vertex[0];
+      }
+      if (vertex[1] > maxCoords.y) {
+        minCoords.y = vertex[1];
+      }
+      if (vertex[2] > maxCoords.z) {
+        minCoords.z = vertex[2];
+      }
     });
+
+    var difference = createVector(abs(maxCoords.x - minCoords.x), abs(maxCoords.y - minCoords.y), abs(maxCoords.z - minCoords.z));
+
+    var largest = difference.x;
+
+    if (difference.y > largest) {
+      largest = difference.y;
+    }
+    if (difference.z > largest) {
+      largest = difference.z;
+    }
+
+
+    print(maxCoords);
+    print(minCoords);
+    print(difference);
+    print(largest);
 
     vertices.forEach(function(vertex){
       vertex[0] -= minCoords.x;
       vertex[1] -= minCoords.y;
       vertex[2] -= minCoords.z;
+
+      vertex[0] /= largest;
+      vertex[1] /= largest;
+      vertex[2] /= largest;
     });
 
     var face = [];

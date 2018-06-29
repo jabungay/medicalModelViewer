@@ -1,7 +1,7 @@
 // Model variables
 var loadedFile = "Splitter";
 var object;
-var modelScale = 15;
+var modelScale = 100;
 var modelAngle;
 var modelPos;
 var onModel;

@@ -38,6 +38,8 @@ function setup() {
 
   object = loadSTL("/ModelViewer/data/" + "splitter" + ".stl");
 
+  print(object);
+
   print(data[names[loadedFile]]["files"][0]);
 }
 
