@@ -143,6 +143,8 @@ function loadSTL(file) {
       }
     });
 
+    // NOTE: fix the code that determines the max and min coords
+
     var difference = createVector(abs(maxCoords.x - minCoords.x), abs(maxCoords.y - minCoords.y), abs(maxCoords.z - minCoords.z));
 
     var largest = difference.x;
