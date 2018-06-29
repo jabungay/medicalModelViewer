@@ -1,0 +1,50 @@
+.pgs (p5.js geometry storage) file format:
+
+Store all information needed for the p5.geometry object.
+
+ParseSTL will create this file, and save it for quicker loading.
+ModelViewer will check if this file exists (or maybe assume it does) when it tries to load the file.
+
+Data needed:				Quantity:
+- edges					x
+- faces (just [0,1,2], [3,4,5], etc.)   x/3
+- Line normals				6x
+- Line vertices				6x
+- UVs ([0,0] for each edge)		x
+- Vertex Normals			x
+- vertices				x
+
+Will do this one of two ways:
+
+1. ASCII way:
+
+	edges
+	    {edge data}
+	faces
+	    {face data}
+	lineNormals
+	    {ln data}
+	lineVertices
+	    {lv data}
+	vertexNormals
+	    {vn data}
+	vertices
+	    {vertex data}
+
+A parser will interpret this data, looking for the keywords, with each line (terminated with \n) having 3 floating
+point numbers. UVs will be filled in by the parser
+
+
+2. Binary way:
+
+	A 4-byte unsigned int header will store the value of x.
+	Next, 3*x 32-bit floating point numbers will represent the edge vertices, 3*x/3 (x) 32-bit floats
+	represent face vertices, etc.
+
+While the ASCII way will be much easier, the binary way may save a lot of storage space.
+
+Creating this file format will mean that, after the file is created, the program will only require one iteration
+through the data to draw the model instead of many.
+	
+	
+
