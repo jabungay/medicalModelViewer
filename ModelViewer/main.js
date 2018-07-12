@@ -17,14 +17,11 @@ function setup() {
   btDownload = createButton('Download');
   btDownload.mousePressed(downloadFiles);
 
-  print(Object.keys(data).length);
-
   dropdown = createSelect();
   for (part in data) {
     names[data[part].name] = part;
     dropdown.option(data[part].name);
   }
-  print(names);
   dropdown.changed(loadFile);
 
   btUpload = createButton("Upload File");
@@ -36,11 +33,8 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  object = loadSTL("/ModelViewer/data/" + "splitter" + ".stl");
+  object = loadSTL("/ModelViewer/data/1/0.stl");
 
-  print(object);
-
-  print(data[names[loadedFile]]["files"][0]);
 }
 
 function draw() {
@@ -74,9 +68,20 @@ function draw() {
 }
 
 function downloadFiles() {
-  for (var i = 0; i < data[loadedFile].files.length; i++) {
-    $.fileDownload('http://' + currentLocation + '/ModelViewer/data/' + data[loadedFile].files[i]);
+  var zip = new JSZip();
+
+  for (var i = 0; i < data[names[loadedFile]]["files"].length; i ++) {
+    var STLFile;
+    var name = i + ".stl";
+    var file = "/ModelViewer/data/" + data[names[loadedFile]]["id"] + "/" + i + ".stl";
+    loadBytes(file, function(data) {
+      zip.file("name.stl", data.bytes);
+    });
   }
+  zip.generateAsync({type:"blob"})
+  .then(function(content) {
+    saveAs(content, data[names[loadedFile]]["name"] + ".zip");
+  });
 }
 
 // Redirect to new page for file upload
@@ -87,5 +92,5 @@ function uploadFiles() {
 
 function loadFile() {
   loadedFile = dropdown.value();
-  object = loadSTL("/ModelViewer/data/" + data[names[loadedFile]]["files"][0]);
+  object = loadSTL("/ModelViewer/data/" + data[names[loadedFile]]["id"] + "/" + data[names[loadedFile]]["files"][0]);
 }
