@@ -6,15 +6,8 @@ function setup() {
 
   currentLocation = window.location.href.split("/")[2];
 
-  btModel = createButton("ModelViewer");
-  btModel.mousePressed(function(){
-    window.location.href = "http://" + currentLocation + "/ModelViewer";
-  });
+  createCanvas(10,45);
 
-  btUpload = createButton("SelectFile");
-  btUpload.mousePressed(function() {
-    window.location.href = "http://" + currentLocation + "/ModelViewer/SelectFile";
-  });
 
   for (i in data) {
     drawData(data[i]);
@@ -22,6 +15,27 @@ function setup() {
 }
 
 function drawData(data) {
+  var info = document.createElement("DIV");
+  info.name = data["name"];
+
+
+  var title = document.createElement("P");
+  title.id = "title";
+  var author = document.createElement("P");
+  author.id = "author";
+  var description = document.createElement("P");
+  description.id = "description";
+
+  title.appendChild(document.createTextNode(data["name"]));
+  author.appendChild(document.createTextNode(data["author"]));
+  description.appendChild(document.createTextNode(data["description"]));
+
+  info.appendChild(title);
+  info.appendChild(author);
+  info.appendChild(description);
+
+  document.body.appendChild(info);
+
   print(data["name"] + ", " + data["author"] + ", " + data["description"]);
 }
 
