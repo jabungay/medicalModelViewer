@@ -64,6 +64,11 @@ div {
     transition-duration: 0.4s;
   color: #3473d8;
   font-size: 20px;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 p[id*="title"] {

@@ -42,7 +42,7 @@ function draw() {
 
   onModel = (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height);
 
-  background(128);
+  background(255);
   noStroke(0);
   ambientMaterial(121, 162, 229);
 

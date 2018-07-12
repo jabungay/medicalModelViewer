@@ -15,9 +15,12 @@ function setup() {
 }
 
 function drawData(data) {
+
+  var click = document.createElement("a");
+  click.href = "ModelViewer/";
+
   var info = document.createElement("DIV");
   info.name = data["name"];
-
 
   var title = document.createElement("P");
   title.id = "title";
@@ -34,7 +37,8 @@ function drawData(data) {
   info.appendChild(author);
   info.appendChild(description);
 
-  document.body.appendChild(info);
+  click.appendChild(info);
+  document.body.appendChild(click);
 
   print(data["name"] + ", " + data["author"] + ", " + data["description"]);
 }
