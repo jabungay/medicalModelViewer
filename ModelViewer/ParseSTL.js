@@ -50,7 +50,7 @@ function hexToFloat(hex) {
 ********************************************/
 function loadSTL(file) {
   var model = new p5.Geometry();
-
+  
   var ascii = false;
 
   var data = loadBytes(file, function(data) {
@@ -81,9 +81,9 @@ function loadSTL(file) {
 
           // 3x Because we have face normals but want
           // vertex normals
-          append(normals, normal);
-          append(normals, normal);
-          append(normals, normal);
+          for (var i = 0; i < 3; i++) {
+            append(normals, normal);
+          }
           faces++;
         } else if (line.includes("vertex")) {
           var vertex = [];
@@ -114,6 +114,7 @@ function loadSTL(file) {
           append(normals, normal);
         }
       }
+
     }
 
     var minCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
@@ -156,12 +157,6 @@ function loadSTL(file) {
       largest = difference.z;
     }
 
-
-    print(maxCoords);
-    print(minCoords);
-    print(difference);
-    print(largest);
-
     vertices.forEach(function(vertex){
       vertex[0] -= minCoords.x;
       vertex[1] -= minCoords.y;
@@ -192,6 +187,6 @@ function loadSTL(file) {
     if (model.vertexNormals.length === 0) {
       model.computeNormals();
     }
-    });
+  });
   return model;
 }
