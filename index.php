@@ -34,7 +34,7 @@
   <body>
     <ul>
       <li><a href="ModelViewer/">Model Viewer</a></li>
-      <li><a href="ModelViewer/SelectFile">Upload a File</a></li>
+      <li><a href="/ModelViewer/uploadModel.php">Upload a File</a></li>
       <li style='float:right' ><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
     </ul>
 
