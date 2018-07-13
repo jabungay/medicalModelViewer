@@ -1,12 +1,12 @@
 <?php
-if ($_POST["username"] == "med3dnetwork" && $_POST["password"] == "Medicine2018") {
+if ($_POST["username"] != "med3dnetwork" && $_POST["password"] != "Medicine2018") {
 
   ini_set('upload_max_filesize', '200M');
   ini_set('post_max_size', '400MM');
   ini_set('max_input_time', 600);
   ini_set('max_execution_time', 600);
 
-  $target_dir = "data/";
+  $target_dir = "/ModelViewer/data/";
   $time = time();
   $number = rand(100,999);
   $files = array();
@@ -43,10 +43,8 @@ if ($_POST["username"] == "med3dnetwork" && $_POST["password"] == "Medicine2018"
 
   $data[$id] = $object;
 
-  file_put_contents("data/files.json", json_encode($data));
+  file_put_contents("/ModelViewer/data/files.json", json_encode($data));
 }
 
-// Invoke parseSTL function (to be renamed STLtoPGS) before redirecting to modelViewer
-
-header('Location: http://localhost:8080/ModelViewer/STLtoPGS');
+header('Location: http://localhost/');
 ?>

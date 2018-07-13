@@ -1,1 +1,58 @@
-{"1":{"id":"1","name":"Splitter","author":"Jonathan Bungay","description":"A y-valve used for catheters.","files":["splitter.stl","valve.stl"]},"2":{"id":"2","name":"Mount","author":"Jonathan Bungay","description":"A mount used to extend a Geeetech 3D printer bed.","files":["mount.stl"]},"3":{"id":"3","name":"Cube","author":"Anonymous","description":"Just a small cube.","files":["cube.stl"]},"4":{"id":"4","name":"Pad","author":"Jack Chapman","description":"","files":["pad.stl"]},"1529598426_954":{"id":"1529598426_954","name":"Silicone Sample","author":"Jonathan B","description":"A mold for silicone samples","files":["0.stl","1.stl"]},"1529598523_373":{"id":"1529598523_373","name":"Bolus","author":"Tim Healey","description":"A Bolus nose positive","files":["0.stl"]},"1530628652_857":{"name":"Test","author":"Unknown","description":"tyu","files":["0.stl"]}}
+{
+   "1":{
+      "id":"1",
+      "name":"Splitter",
+      "author":"Jonathan Bungay",
+      "description":"A y-valve used for catheters.",
+      "files":[
+         "splitter.stl",
+         "valve.stl"
+      ]
+   },
+   "2":{
+      "id":"2",
+      "name":"Mount",
+      "author":"Jonathan Bungay",
+      "description":"A mount used to extend a Geeetech 3D printer bed.",
+      "files":[
+         "mount.stl"
+      ]
+   },
+   "3":{
+      "id":"3",
+      "name":"Cube",
+      "author":"Anonymous",
+      "description":"Just a small cube.",
+      "files":[
+         "cube.stl"
+      ]
+   },
+   "4":{
+      "id":"4",
+      "name":"Pad",
+      "author":"Jack Chapman",
+      "description":"",
+      "files":[
+         "pad.stl"
+      ]
+   },
+   "1529598426_954":{
+      "id":"1529598426_954",
+      "name":"Silicone Sample",
+      "author":"Jonathan B",
+      "description":"A mold for silicone samples",
+      "files":[
+         "0.stl",
+         "1.stl"
+      ]
+   },
+   "1529598523_373":{
+      "id":"1529598523_373",
+      "name":"Bolus",
+      "author":"Tim Healey",
+      "description":"A Bolus nose positive",
+      "files":[
+         "0.stl"
+      ]
+   }
+}

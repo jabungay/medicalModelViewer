@@ -16,8 +16,13 @@ function setup() {
 
 function drawData(data) {
 
+  var a = "test";
+
   var click = document.createElement("a");
-  click.href = "ModelViewer/";
+  click.addEventListener('click', function() {
+    sessionStorage.setItem('load', data["name"]);
+    location.href = "/ModelViewer/"
+  });
 
   var info = document.createElement("DIV");
   info.name = data["name"];
@@ -28,6 +33,7 @@ function drawData(data) {
   author.id = "author";
   var description = document.createElement("P");
   description.id = "description";
+
 
   title.appendChild(document.createTextNode(data["name"]));
   author.appendChild(document.createTextNode(data["author"]));
@@ -40,7 +46,7 @@ function drawData(data) {
   click.appendChild(info);
   document.body.appendChild(click);
 
-  print(data["name"] + ", " + data["author"] + ", " + data["description"]);
+  //print(data["name"] + ", " + data["author"] + ", " + data["description"]);
 }
 
 function draw() {

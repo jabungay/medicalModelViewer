@@ -1,3 +1,19 @@
+<?php
+  // Initialize the session
+  session_start();
+
+  $message = $action = "";
+
+  // If session variable is not set it will redirect to login page
+  if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
+    $message = "Log In";
+    $action = "login.php";
+} else {
+  $message =$_SESSION['username'];
+  $action = "logout.php";
+}
+?>
+
 <html>
   <head>
     <title>ModelViewer Home</title>
@@ -19,6 +35,14 @@
     <ul>
       <li><a href="ModelViewer/">Model Viewer</a></li>
       <li><a href="ModelViewer/SelectFile">Upload a File</a></li>
+      <li style='float:right' ><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
     </ul>
+
+    <script>
+      function test(val) {
+        print(val);
+      }
+    </script>
+
   </body>
 </html>

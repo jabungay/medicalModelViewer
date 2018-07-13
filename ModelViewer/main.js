@@ -17,12 +17,9 @@ function setup() {
   btDownload = createButton('Download');
   btDownload.mousePressed(downloadFiles);
 
-  dropdown = createSelect();
   for (part in data) {
     names[data[part].name] = part;
-    dropdown.option(data[part].name);
   }
-  dropdown.changed(loadFile);
 
   btUpload = createButton("Upload File");
   btUpload.mousePressed(uploadFiles);
@@ -33,7 +30,9 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  object = loadSTL("/ModelViewer/data/1/0.stl");
+  loadFile();
+
+  print(sessionStorage.getItem('load'));
 
 }
 
@@ -91,6 +90,6 @@ function uploadFiles() {
 }
 
 function loadFile() {
-  loadedFile = dropdown.value();
+  loadedFile = sessionStorage.getItem('load');
   object = loadSTL("/ModelViewer/data/" + data[names[loadedFile]]["id"] + "/" + data[names[loadedFile]]["files"][0]);
 }

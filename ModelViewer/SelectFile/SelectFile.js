@@ -17,7 +17,7 @@ function setup() {
 
   var form = document.createElement("FORM");
   form.method = "POST"
-  form.action = "upload.php"
+  form.action = "/ModelViewer/upload.php"
   form.setAttribute("enctype", "multipart/form-data");
 
   var username = document.createElement("INPUT");
