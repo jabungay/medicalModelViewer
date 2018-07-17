@@ -93,6 +93,14 @@ p[id*="title"] {
   font-size: 32px;
 }
 
+form {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+
+}
+
 .form-group {
   background-color: white;
   width: 95%;
@@ -104,6 +112,10 @@ p[id*="title"] {
   background-color: white;
   color: #a50016;
   border: none;
+}
+
+.form-control {
+  width: 85%;
 }
 
 .help-block {
