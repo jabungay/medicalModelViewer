@@ -6,7 +6,8 @@ function setup() {
 
   currentLocation = window.location.href.split("/")[2];
 
-  createCanvas(10,45);
+  canvas = createCanvas(10, 45);
+
 
 
   for (i in data) {
@@ -25,6 +26,7 @@ function drawData(data) {
   });
 
   var info = document.createElement("DIV");
+  info.setAttribute('class', 'select');
   info.name = data["name"];
 
   var title = document.createElement("P");
@@ -47,7 +49,4 @@ function drawData(data) {
   document.body.appendChild(click);
 
   //print(data["name"] + ", " + data["author"] + ", " + data["description"]);
-}
-
-function draw() {
 }
