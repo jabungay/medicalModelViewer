@@ -6,7 +6,7 @@
   if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
     $message = "Please <a href='/login.php'> log in <a> to upload files!";
   } else {
-    $target_dir = "/ModelViewer/data/";
+    $target_dir = "data/";
     $time = time();
     $number = rand(100,999);
     $files = array();
@@ -17,33 +17,37 @@
     $author = $_POST["author"];
     $description = $_POST["description"];
 
-    $JSON = file_get_contents("/ModelViewer/data/files.json");
+    $JSON = file_get_contents("data/files.json");
     $data = json_decode($JSON, true);
     $uploadOK = 1;
 
-    for ($i = 0; $i < $total; $i++) {
-      $file_type = end(explode(".",$_FILES["fileToUpload"]["name"][$i]));
-      $id = $time . "_" . $number;
-      $file_name = $i . "." . $file_type;
-      $target_file = $target_dir . $id . "/" . $file_name;
+    if ($total > 0) {
+      for ($i = 0; $i < 1; $i++) {
 
-      if ($uploadOk == 1) {
-        mkdir($target_dir . $id);
-        $files[$i] = $file_name;
-        move_uploaded_file($_FILES["fileToUpload"]["tmp_name"][$i], $target_file);
+        $file_type = end(explode(".",$_FILES["upload"]["name"][$i]));
+        $id = $time . "_" . $number;
+        $file_name = $i . "." . $file_type;
+        $target_file = $target_dir . $id . "/" . $file_name;
+
+        if ($uploadOK == 1) {
+
+          mkdir($target_dir . $id);
+          $files[$i] = $file_name;
+          move_uploaded_file($_FILES["upload"]["tmp_name"][$i], $target_file);
+        }
       }
+
+      $object->id = $id;
+      $object->name = $title;
+      $object->author = $author;
+      $object->description = $description;
+      $object->files = $files;
+      $data[$id] = $object;
+
+      file_put_contents("data/files.json", json_encode($data));
     }
-
-    $object->name = $title;
-    $object->author = $author;
-    $object->description = $desc;
-    $object->files = $files;
-    $data[$id] = $object;
-
-    file_put_contents("/ModelViewer/data/files.json", json_encode($data));
-
-
   }
+
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +59,16 @@
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
 </head>
 <body>
-  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+  <ul>
+    <a href="/">
+      <img src="/img/Med3D_Logo_WhiteGrey.png" alt title>
+    </a>
+    <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
+    <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
+  </ul>
+
+  <a href="/"> Go Home <a>
+  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <span class="help-block"><?php echo $message ?> </span>
         <p></p>

@@ -1,8 +1,7 @@
-- Add some sort of visually appealing theme
 - Show model metadata: author, name, parts, etc.
 - Download counter
-- When a model is loaded, load all its metadata into different variables
 - For multiple object models, allow the viewing of different models (either all together or as different files)
-- Uploading new files
-- User accounts, security
 - Comments
+- Fix ParseSTL's centering and scaling functionality
+- Fix the uploading so it actually works
+- Move from using a JSON file to store file information to an SQL database
