@@ -7,11 +7,6 @@ var names = [];
 function setup() {
   currentLocation = window.location.href.split("/")[2];
 
-  btBack = createButton("Back");
-  btBack.mousePressed(function() {
-    window.location.href = "http://" + currentLocation + "/..";
-  });
-
   graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
   btDownload = createButton('Download');
@@ -20,9 +15,6 @@ function setup() {
   for (part in data) {
     names[data[part].name] = part;
   }
-
-  btUpload = createButton("Upload File");
-  btUpload.mousePressed(uploadFiles);
 
   modelPos = createVector(0, 0);
   modelAngle = createVector(5.506, 2.264);
@@ -37,13 +29,11 @@ function setup() {
 }
 
 function draw() {
-  background(55);
-
   onModel = (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height);
 
-  background(255);
+  background(100,100,100);
   noStroke(0);
-  ambientMaterial(121, 162, 229);
+  ambientMaterial(122, 0, 16);
 
   camera(0, 0, (height/2.0) / tan(PI*30.0 / 180.0), 0, 0, 0, 0, 1, 0);
 
@@ -81,12 +71,6 @@ function downloadFiles() {
   .then(function(content) {
     saveAs(content, data[names[loadedFile]]["name"] + ".zip");
   });
-}
-
-// Redirect to new page for file upload
-//TODO: Look into making this a popup of some sort
-function uploadFiles() {
-  window.location.href = window.location.href + "/SelectFile";
 }
 
 function loadFile() {
