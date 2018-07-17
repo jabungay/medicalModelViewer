@@ -1,7 +1,10 @@
-body {
+body, html {
+  height: 100%;
   margin: 0;
   padding: 0;
-  background-color: white;
+  font-family: "Open Sans", sans-serif;
+  background-image: url("/img/bg.jpg");
+
 }
 
 
@@ -9,15 +12,19 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  background-color: #333;
+  background-color: rgba(0, 0, 0, 0.9);
   position: fixed;
   width:100%;
   overflow: hidden;
-  font-family: "Arial", Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  position: fixed;
+  z-index: 999;
+
 }
 
 li {
-  float: left;
+  float: right;
 }
 
 li a {
@@ -25,21 +32,16 @@ li a {
     color: white;
     padding: 14px 16px;
     text-decoration: none;
-}
-
-li a.active {
-    background-color: #4CAF50;
-    color: white;
+    transition: 0.5s;
+    text-transform: uppercase;
 }
 
 li a:hover:not(.active) {
-    background-color: black;
-    color: white;
+    color: #a50016;
 }
 
 button {
-  background-color: #3473d8;
-  border: 2px solid #3473d8;
+  background-color: #a50016;
   -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
   color: white;
@@ -52,23 +54,34 @@ button {
 
 button:hover {
   background-color: white;
-  color: #3473d8;
-  border: 2px solid #3473d8;
+  color: #a50016;
+  border: 2px solid #a50016;
 }
 
 div {
   margin: 0;
   padding: 0;
-  border: 1px solid #3473d8;
-  -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-  color: #3473d8;
-  font-size: 20px;
-  text-decoration: none;
 }
 
 div:hover {
-  background-color: #3473d8;
+
+}
+
+.select {
+  margin: 0;
+  padding: 0;
+  border: 1px solid #a50016;
+  -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+
+}
+
+.select:hover {
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
 }
 
@@ -82,14 +95,14 @@ p[id*="title"] {
 
 .form-group {
   background-color: white;
-  width: 100%;
+  width: 95%;
   padding: 10px;
-  color: #3473d8;
+  color: #a50016;
   border: none;
 }
 .form-group:hover {
   background-color: white;
-  color: #3473d8;
+  color: #a50016;
   border: none;
 }
 
@@ -98,20 +111,22 @@ p[id*="title"] {
 }
 
 input {
-  width: 100%;
+  width: 95%;
   padding: 12px 20px;
   margin: 8px 0;
 }
 
 input[type="submit"] {
   color: white;
-  background-color: #3473d8;
+  width: 100%;
+  background-color: #a50016;
   cursor: pointer;
 }
 
 textarea {
-  width: 100%;
+  width: 95%;
   height: 100px;
+  resize: none;
   margin: 8px 0;
   padding: 12px 20px;
 }
