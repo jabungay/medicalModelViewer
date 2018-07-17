@@ -6,11 +6,11 @@
 
   // If session variable is not set it will redirect to login page
   if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-    $message = "Log In";
+    $message = "LOG IN";
     $action = "login.php";
 } else {
   $message =$_SESSION['username'];
-  $action = "logout.php";
+  $action = "account.php";
 }
 ?>
 
@@ -28,14 +28,15 @@
     <script src="/scripts/download.js"></script>
     <script src="/FileBrowser.js"></script>
     <script src="/ModelViewer/globalVars.js"></script>
-    <script src="/ModelViewer/globalFuncs.js"></script>
     <script src="/ModelViewer/ParseSTL.js"></script>
   </head>
   <body>
     <ul>
-      <li><a href="ModelViewer/">Model Viewer</a></li>
-      <li><a href="/ModelViewer/uploadModel.php">Upload a File</a></li>
-      <li style='float:right' ><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
+      <a href="/">
+        <img src="img/Med3D_Logo_WhiteGrey.png" alt title>
+      </a>
+      <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
+      <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
     </ul>
 
     <script>
