@@ -17,6 +17,7 @@
 <html>
   <head>
     <title>ModelViewer Home</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/style.css" media="screen" />
     <meta charset="utf-8">
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
@@ -38,12 +39,5 @@
       <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
       <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
     </ul>
-
-    <script>
-      function test(val) {
-        print(val);
-      }
-    </script>
-
   </body>
 </html>
