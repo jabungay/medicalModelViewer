@@ -4,8 +4,13 @@
   $title = $author = $description = $message = "";
 
   if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-    $message = "Please <a href='/login.php'> log in <a> to upload files!";
+    $error = "Please <a href='/login.php'> log in <a> to upload files!";
+    $message = "log in";
+    $action = "../login.php";
+    echo "<script type='text/javascript'>alert('Please log in to upload a file!'); window.location.href = '../login.php'</script>";
   } else {
+    $message = $_SESSION['username'];
+    $action = "../account.php";
     $target_dir = "data/";
     $time = time();
     $number = rand(100,999);
@@ -45,6 +50,7 @@
       $data[$id] = $object;
 
       file_put_contents("data/files.json", json_encode($data));
+      header('location: ../index.php');
     }
   }
 
@@ -70,7 +76,7 @@
   <a href="/"> Go Home <a>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
       <div class="form-group">
-        <span class="help-block"><?php echo $message ?> </span>
+        <span class="help-block"><?php echo $error ?> </span>
         <p></p>
       </div>
       <div class="form-group">
