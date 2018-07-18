@@ -1,6 +1,6 @@
 <?php
-echo "future location of account settings"
-
+  $message = "LOG OUT";
+  $action = "logout.php";
 ?>
 
 <!DOCTYPE html>
@@ -15,5 +15,12 @@ echo "future location of account settings"
     </style>
 </head>
 <body>
-  <button onclick="window.location.href='logout.php'"> Log Out </button>
+  <ul>
+    <a href="/">
+      <img src="img/Med3D_Logo_WhiteGrey.png" alt title>
+    </a>
+    <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
+    <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
+  </ul>
+  <h class='notice'> Future Location of Account Settings </h>
 </body>
