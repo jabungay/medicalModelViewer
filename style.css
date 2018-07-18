@@ -122,6 +122,12 @@ form {
   color: red;
 }
 
+.notice {
+  font-size: 32pt;
+  position: relative;
+  top: 80px;
+}
+
 input {
   width: 95%;
   padding: 12px 20px;
