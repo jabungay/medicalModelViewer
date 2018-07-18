@@ -1,5 +1,5 @@
 function preload() {
-  data = loadJSON("/ModelViewer/data/files.json");
+  data = loadJSON("data/files.json");
 }
 
 var names = [];
