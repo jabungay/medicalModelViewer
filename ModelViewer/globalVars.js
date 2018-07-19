@@ -5,6 +5,8 @@ var modelScale = 10;
 var modelAngle;
 var modelPos;
 var onModel;
+var names = [];
+
 
 // JSON object of models
 var data;
