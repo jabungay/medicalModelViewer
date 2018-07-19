@@ -1,3 +1,5 @@
+// Collect data from sql using php, then draw it
+
 function preload() {
   data = loadJSON("/ModelViewer/data/files.json");
 }

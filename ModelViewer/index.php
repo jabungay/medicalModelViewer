@@ -4,7 +4,7 @@
 
   $message = $action = "";
 
-  // If session variable is not set it will redirect to login page
+  // Change login message depending on whether the user is logged in
   if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
     $message = "LOG IN";
     $action = "../login.php";
