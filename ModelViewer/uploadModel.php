@@ -35,11 +35,6 @@
     $author = $_POST["author"];
     $description = $_POST["description"];
 
-    // Load JSON file of models then decode it
-    // TODO: migrate to a SQL table
-    $JSON = file_get_contents("data/files.json");
-    $data = json_decode($JSON, true);
-
     // Store information about if anything is wrong. If this variable
     // gets set to 0, don't upload the files
     $uploadOK = 1;
@@ -54,7 +49,16 @@
         // Concatenate the data from earlier to generate a folder name and a target file.
         // Files are named sequentially (0.stl, 1.stl, etc)
         // TODO: find a way to conserve the file name
-        $id = $time . "_" . $number;
+
+        $sql = "SELECT id FROM models ORDER BY id DESC LIMIT 1";
+        $result = mysqli_query($link, $sql);
+        while ($row = mysqli_fetch_assoc($result))
+        {
+          $id = $row['id'] + 1;
+        }
+        if (empty($id)) {
+          $id = 1;
+        }
         $file_name = $i . "." . $file_type;
         $target_file = $target_dir . $id . "/" . $file_name;
 
@@ -84,17 +88,6 @@
       } else {
         //if fail
       }
-
-      // Soon to be deprecated code that adds model info to JSON file
-      $object->id = $id;
-      $object->name = $title;
-      $object->author = $author;
-      $object->description = $description;
-      $object->files = $files;
-      $data[$id] = $object;
-
-      // Re-encode JSON and put it back in the files.json file
-      file_put_contents("data/files.json", json_encode($data));
 
       // Redirect to main page when completed
       header('location: ../index.php');

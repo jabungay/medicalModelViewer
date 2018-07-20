@@ -1,6 +1,8 @@
 <?php
   // Initialize the session
+  require_once "../config.php";
   session_start();
+
 
   $message = $action = "";
 
@@ -12,6 +14,24 @@
   $message =$_SESSION['username'];
   $action = "../account.php";
 }
+
+$modelID = $_GET['model'];
+$model = array();
+
+$sql = "SELECT * FROM models WHERE id='$modelID'";
+
+$result = mysqli_query($link, $sql);
+
+while ($row = mysqli_fetch_assoc($result))
+{
+  $model["id"] = $row['id'];
+  $model['name'] = $row['name'];
+  $model['author'] = $row['author'];
+  $model['description'] = $row['description'];
+}
+
+mysqli_close($link);
+
 ?>
 
 <!DOCTYPE html>
@@ -45,5 +65,13 @@
       <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
       <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
     </ul>
+    <div class="model-data" id='titlebar'>
+      <h class="title"> <?php echo htmlspecialchars($model['name']); ?> </h>
+      <h> <?php echo htmlspecialchars($model['author']); ?>  </h>
+      <button onclick= "location.href = 'downloadModel.php?model=' + loadedModel['id']" class=download-button> Download </a>
+    </div>
+    <script type="text/javascript">
+      var loadedModel = <?php echo json_encode($model); ?>;
+    </script>
   </body>
 </html>

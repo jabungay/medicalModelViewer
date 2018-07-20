@@ -1,5 +1,6 @@
 <?php
   // Initialize the session
+  require_once "config.php";
   session_start();
 
   $message = $action = "";
@@ -13,6 +14,23 @@
     $action = "account.php";
 }
 
+// Store all model data
+// TODO: only get a few models per page to increase speed
+$models = array();
+// Collect all model data from the SQL table and put it in the model array
+$sql = "SELECT id, name, author, description FROM models";
+$result = mysqli_query($link, $sql);
+while ($row = mysqli_fetch_assoc($result))
+{
+  $model = array();
+  $model["id"] = $row['id'];
+  $model['name'] = $row['name'];
+  $model['author'] = $row['author'];
+  $model['description'] = $row['description'];
+  array_push($models, $model);
+}
+
+mysqli_close($link);
 
 ?>
 
@@ -24,14 +42,8 @@
     <meta charset="utf-8">
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
     <style> body {padding: 0; margin: 0;} </style>
-    <script src="/scripts/p5.min.js"></script>
-    <script src="/scripts/addons/p5.dom.min.js"></script>
-    <script src="/scripts/addons/p5.sound.min.js"></script>
     <script src="/scripts/jquery-3.3.1.min.js"></script>
-    <script src="/scripts/download.js"></script>
-    <script src="/FileBrowser.js"></script>
-    <script src="/ModelViewer/globalVars.js"></script>
-    <script src="/ModelViewer/ParseSTL.js"></script>
+
   </head>
   <body>
     <ul>
@@ -41,5 +53,47 @@
       <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
       <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
     </ul>
+    <script type='text/javascript'>
+
+      // Get model data and store in an array
+      var data = <?php echo(json_encode($models)); ?>;
+
+      // Iterate through every model and add DOM elements of their info
+      data.forEach(function(model) {
+
+        // Add event listener to add model name to seesionStorage then
+        // redirect to the model viewer page
+        var click = document.createElement("a");
+        click.addEventListener('click', function() {
+          sessionStorage.setItem('load', model["name"]);
+          location.href = "ModelViewer/index.php?model=" + model["id"];
+        });
+
+        // Add div to store all text
+        var info = document.createElement("DIV");
+        info.setAttribute('class', 'select');
+        info.name = model["name"];
+
+        // Add title, author, description as P elements
+        var title = document.createElement("P");
+        title.id = "title";
+        var author = document.createElement("P");
+        author.id = "author";
+        var description = document.createElement("P");
+        description.id = "description";
+
+        // Add text to their appropriate P elements
+        title.appendChild(document.createTextNode(model["name"]));
+        author.appendChild(document.createTextNode(model["author"]));
+        description.appendChild(document.createTextNode(model["description"]));
+
+        // Put everything together
+        info.appendChild(title);
+        info.appendChild(author);
+        info.appendChild(description);
+        click.appendChild(info);
+        document.body.appendChild(click);
+      });
+    </script>
   </body>
 </html>
