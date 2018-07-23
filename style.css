@@ -185,3 +185,10 @@ textarea {
   top: 70px;
   right: 5%;
 }
+
+.delete-button {
+  position: fixed;
+  top: 70px;
+  right: 20%;
+  z-index: 999;
+}
