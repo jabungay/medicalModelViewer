@@ -46,6 +46,25 @@
         // Find the file extension for renaming the file later
         $file_type = end(explode(".",$_FILES["upload"]["name"][$i]));
 
+        // SQL escape strings to prevent SQL injection
+        $id_sql = mysqli_real_escape_string($link, $id);
+        $title_sql = mysqli_real_escape_string($link, $title);
+        $author_sql = mysqli_real_escape_string($link, $author);
+        $description_sql = mysqli_real_escape_string($link, $description);
+        $total_sql = mysqli_real_escape_string($link, $total);
+        $uploadedBy = mysqli_real_escape_string($link, $_SESSION['username']);
+
+        // SQL to add model info to table
+        $sql = "INSERT INTO models (name, author, description, files, uploaded_by)
+                VALUES ('$title_sql', '$author_sql', '$description_sql', '$total_sql', '$uploadedBy')";
+
+        // TODO: generate a message of some sort depending on if the file upload was a success or fail
+        if(mysqli_query($link, $sql)){
+          //if success;
+        } else {
+          //if fail
+        }
+
         // Concatenate the data from earlier to generate a folder name and a target file.
         // Files are named sequentially (0.stl, 1.stl, etc)
         // TODO: find a way to conserve the file name
@@ -54,7 +73,7 @@
         $result = mysqli_query($link, $sql);
         while ($row = mysqli_fetch_assoc($result))
         {
-          $id = $row['id'] + 1;
+          $id = $row['id'];
         }
         if (empty($id)) {
           $id = 1;
@@ -71,23 +90,9 @@
 
       }
 
-      // SQL escape strings to prevent SQL injection
-      $id_sql = mysqli_real_escape_string($link, $id);
-      $title_sql = mysqli_real_escape_string($link, $title);
-      $author_sql = mysqli_real_escape_string($link, $author);
-      $description_sql = mysqli_real_escape_string($link, $description);
-      $total_sql = mysqli_real_escape_string($link, $total);
 
-      // SQL to add model info to table
-      $sql = "INSERT INTO models (name, author, description, files)
-              VALUES ('$title_sql', '$author_sql', '$description_sql', '$total_sql')";
 
-      // TODO: generate a message of some sort depending on if the file upload was a success or fail
-      if(mysqli_query($link, $sql)){
-        //if success;
-      } else {
-        //if fail
-      }
+
 
       // Redirect to main page when completed
       header('location: ../index.php');
