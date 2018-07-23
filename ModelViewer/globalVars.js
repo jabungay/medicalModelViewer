@@ -6,6 +6,8 @@ var modelPos;
 var onModel;
 var names = [];
 
+var modelList = [];
+
 
 // JSON object of models
 var data;
