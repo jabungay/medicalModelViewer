@@ -18,6 +18,8 @@
 $modelID = $_GET['model'];
 $model = array();
 
+$isAdmin = 'n';
+
 $sql = "SELECT * FROM models WHERE id='$modelID'";
 
 $result = mysqli_query($link, $sql);
@@ -28,7 +30,20 @@ while ($row = mysqli_fetch_assoc($result))
   $model['name'] = $row['name'];
   $model['author'] = $row['author'];
   $model['description'] = $row['description'];
+  $model['uploaded_by'] = $row['uploaded_by'];
 }
+
+$username = $_SESSION['username'];
+
+$sql = "SELECT * FROM users WHERE username='$username'";
+
+$result = mysqli_query($link, $sql);
+
+while ($row = mysqli_fetch_assoc($result))
+{
+  $isAdmin = $row['admin'];
+}
+
 
 mysqli_close($link);
 
@@ -38,8 +53,6 @@ mysqli_close($link);
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/style.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="/ModelViewer/style.css" media="screen" />
-
     <title>ModelViewer</title>
     <meta charset="utf-8">
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
@@ -72,6 +85,15 @@ mysqli_close($link);
     </div>
     <script type="text/javascript">
       var loadedModel = <?php echo json_encode($model); ?>;
+
+      if (loadedModel['uploaded_by'] === '<?php echo ($_SESSION['username']); ?>' || "<?php echo $isAdmin; ?>" === 'y') {
+        console.log("deletable");
+        var del = document.createElement('button');
+        del.setAttribute('onclick', "location.href = 'deleteModel.php?model=' + loadedModel['id']");
+        del.setAttribute('class', 'delete-button');
+        del.innerHTML = "Delete";
+        document.body.appendChild(del);
+      }
     </script>
   </body>
 </html>
