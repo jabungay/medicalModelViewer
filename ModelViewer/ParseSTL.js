@@ -49,11 +49,15 @@ function hexToFloat(hex) {
 * @modifies the result array
 ********************************************/
 function loadSTL(file) {
+  var offset = 84;
   var model = new p5.Geometry();
+
+  var facesPerModel = 20000;
 
   var ascii = false;
 
   var data = loadBytes(file, function(data) {
+
   var bytes = Array.from(data.bytes);
 
     // Check to see if the first 5 chars of the array are 'solid'
@@ -94,101 +98,64 @@ function loadSTL(file) {
         }
       });
     } else {
-      faces = parseInt(get4Byte(bytes, 80, true), 16);
-      print(faces);
-      var offset = 84;
+      faces = get4Byte(bytes, 80, true);
 
-      for(var face = 0; face < faces; face++) {
-        normal = [];
-        var index = offset + 50 * face;
-        append(normal, hexToFloat(get4Byte(bytes, index, true)));
-        append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
-        append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
+      var modelCount = int(faces / facesPerModel) + 1;
 
-        for(var i = 0; i < 3; i++) {
-          var vertex = [];
-          var vertexStart = index + 12 + i * 12;
-          append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
-          append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
-          append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
-          append(vertices, vertex);
-          append(normals, normal);
+      for (model = 0; model < modelCount; model++){
+
+        var vertices = [];
+        var normals = [];
+
+        var tempModel = new p5.Geometry();
+
+        var modelFaces = facesPerModel;
+        if (model === modelCount - 1) {
+          modelFaces = faces % facesPerModel;
         }
-      }
 
+        for(var face = 0; face < modelFaces; face++) {
+          normal = [];
+          var index = offset + 50 * face + facesPerModel * model * 50;
+          //print(index);
+          append(normal, hexToFloat(get4Byte(bytes, index, true)));
+          append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
+          append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
+
+          for(var i = 0; i < 3; i++) {
+            var vertex = [];
+            var vertexStart = index + 12 + i * 12;
+            append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
+            append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
+            append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
+            append(vertices, vertex);
+            append(normals, normal);
+          }
+        }
+        var face = [];
+        tempModel.gid = file + model;
+
+        for (var i = 0; i < vertices.length / 3; i++) {
+          var start = i * 3;
+          face.push(start);
+          face.push(start + 1);
+          face.push(start + 2);
+          for (var j = start; j < start + 3; j++) {
+            tempModel.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+            tempModel.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
+            tempModel.uvs.push([0,0]);
+          }
+          tempModel.faces.push(face);
+          face = [];
+        }
+
+        if (tempModel.vertexNormals.length === 0) {
+          tempModel.computeNormals();
+        }
+      append(modelList, tempModel);
+
+      // print(tempModel);
     }
-
-    var minCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
-    var maxCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
-    //
-    //
-    // // These 2 forEach loops put the model at (0,0,0) and normalize its dimensions
-    // vertices.forEach(function(vertex){
-    //   if (vertex[0] < minCoords.x) {
-    //     minCoords.x = vertex[0];
-    //   }
-    //   if (vertex[1] < minCoords.y) {
-    //     minCoords.y = vertex[1];
-    //   }
-    //   if (vertex[2] < minCoords.z) {
-    //     minCoords.z = vertex[2];
-    //   }
-    //
-    //   if (vertex[0] > maxCoords.x) {
-    //     minCoords.x = vertex[0];
-    //   }
-    //   if (vertex[1] > maxCoords.y) {
-    //     minCoords.y = vertex[1];
-    //   }
-    //   if (vertex[2] > maxCoords.z) {
-    //     minCoords.z = vertex[2];
-    //   }
-    // });
-    //
-    // // NOTE: fix the code that determines the max and min coords
-    //
-    // var difference = createVector(abs(maxCoords.x - minCoords.x), abs(maxCoords.y - minCoords.y), abs(maxCoords.z - minCoords.z));
-    //
-    // var largest = difference.x;
-    //
-    // if (difference.y > largest) {
-    //   largest = difference.y;
-    // }
-    // if (difference.z > largest) {
-    //   largest = difference.z;
-    // }
-    //
-    // vertices.forEach(function(vertex){
-    //   vertex[0] -= minCoords.x;
-    //   vertex[1] -= minCoords.y;
-    //   vertex[2] -= minCoords.z;
-    //
-    //   vertex[0] /= largest;
-    //   vertex[1] /= largest;
-    //   vertex[2] /= largest;
-    // });
-
-    var face = [];
-    model.gid = file;
-
-    for (var i = 0; i < vertices.length / 3; i++) {
-      var start = i * 3;
-      face.push(start);
-      face.push(start + 1);
-      face.push(start + 2);
-      for (var j = start; j < start + 3; j++) {
-        model.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
-        model.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
-        model.uvs.push([0,0]);
-      }
-      model.faces.push(face);
-      face = [];
-    }
-
-    if (model.vertexNormals.length === 0) {
-      model.computeNormals();
-    }
+  }
   });
-  print(model);
-  return model;
 }
