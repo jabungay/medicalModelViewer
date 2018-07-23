@@ -14,7 +14,9 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  object = loadSTL( "/ModelViewer/data/" + loadedModel['id'] + "/0.stl" );
+  loadSTL( "/ModelViewer/data/" + loadedModel['id'] + "/0.stl" );
+
+
 }
 
 function draw() {
@@ -51,7 +53,10 @@ function draw() {
   rotateY(modelAngle.x);
 
   // Actually put the model on the screen
-  model(object);
+  modelList.forEach(function(object){
+    model(object);
+  });
+
 
   // Enable or disable scroll depending on where the mouse is on screen
   changeScroll();
