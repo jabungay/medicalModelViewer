@@ -1,7 +1,8 @@
-- Show model metadata: author, name, parts, etc.
+- Show model metadata: parts, etc.
 - Download counter
 - For multiple object models, allow the viewing of different models (either all together or as different files)
 - Comments
 - Fix ParseSTL's centering and scaling functionality
-- Fix the uploading so it actually works
-- Move from using a JSON file to store file information to an SQL database
+- Generate thumbnail image on upload
+- Speed up ParseSTL
+- Refactor ALL css to improve compatibility with all displays
