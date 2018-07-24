@@ -1,8 +1,9 @@
-
 <?php
-require_once '../config.php';
-session_start();
+// TODO: generate zip names based on what model is being downloaded then delete them after
 
+require_once '../config.php';
+
+// Generate titlebar messages
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   $error = "Please <a href='/login.php'> log in <a> to upload files!";
   $message = "log in";
@@ -11,6 +12,18 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   $message = $_SESSION['username'];
   $action = "../account.php";
 }
+
+$model = $_GET['model'];
+
+$zipname = "file.zip";
+
+$zip = new ZipArchive;
+$zip->open($zipname, ZipArchive::OVERWRITE);
+foreach (glob("data/" . $model . "/*") as $file) {
+  $name = explode("/", $file)[2];
+  $zip->addFile($file, $name);
+}
+$zip->close();
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +47,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   </ul>
   <h class="notice">Download Starting...</h>
   <script type="text/javascript">
-    var file = "<?php echo $_GET['f']; ?>";
+    var file = "<?php echo($zipname); ?>";
     location.href = file;
   </script>
 </body>
