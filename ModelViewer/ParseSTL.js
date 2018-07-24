@@ -46,9 +46,13 @@ function hexToFloat(hex) {
 * loadSTL: generates a p5.Geometry object from
 * an STL file.
 * @param file: the STL file
-* @modifies the result array
+* @modifies the models array
+* TODO: fix ASCII loading
 ********************************************/
 function loadSTL(file) {
+
+  modelList = [];
+
   var offset = 84;
   var model = new p5.Geometry();
 
@@ -148,14 +152,12 @@ function loadSTL(file) {
           tempModel.faces.push(face);
           face = [];
         }
-
         if (tempModel.vertexNormals.length === 0) {
           tempModel.computeNormals();
         }
       append(modelList, tempModel);
-
-      // print(tempModel);
     }
   }
   });
+  loadedFile = loadFile;
 }

@@ -1,8 +1,4 @@
 function setup() {
-  // Determine if we're local or not
-  // TODO: this isn't necessary, migrate to "../" notation
-  currentLocation = window.location.href.split("/")[2];
-
   // Create graphics window
   // TODO: make it bigger
   graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
@@ -14,13 +10,10 @@ function setup() {
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  loadSTL( "/ModelViewer/data/" + loadedModel['id'] + "/0.stl" );
-
-
+  loadSTL("data/" + loadedModel['id'] + "/" +  loadedModel['main_file']);
 }
 
 function draw() {
-
   // Determine if the mouse is on top of the graphics window.
   // If so, enable the camera controls
   onModel = (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height);
@@ -52,11 +45,15 @@ function draw() {
   rotateX(modelAngle.y);
   rotateY(modelAngle.x);
 
-  // Actually put the model on the screen
+  // Actually put the models on the screen
   modelList.forEach(function(object){
     model(object);
   });
 
+  // If we change the loaded model via HTML, load this new model
+  if (loadedFile != loadFile) {
+    loadSTL( "data/" + loadedModel['id'] +"/" + loadFile );
+  }
 
   // Enable or disable scroll depending on where the mouse is on screen
   changeScroll();

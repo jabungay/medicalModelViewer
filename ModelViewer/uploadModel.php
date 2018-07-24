@@ -20,80 +20,55 @@
 
     $target_dir = "data/";
 
-    // Data for generating folder name (UNIX timecode + _ + random number from 100-999)
-    $time = time();
-    $number = rand(100,999);
-
-    $files = array();
-    $object = (object) [];
-
     // Determine how many files were chosen
     $total = count($_FILES["upload"]["name"]);
+
+    if ($total > 0) {
 
     // Collect form data
     $title = $_POST["title"];
     $author = $_POST["author"];
     $description = $_POST["description"];
+    $main_file = $_FILES["mainFile"]["name"];
+
 
     // Store information about if anything is wrong. If this variable
     // gets set to 0, don't upload the files
     $uploadOK = 1;
 
-    // Only do these things if the user actually chose at least 1 file to upload
-    if ($total > 0) {
+    // SQL escape strings to prevent SQL injection
+    $title_sql = mysqli_real_escape_string($link, $title);
+    $author_sql = mysqli_real_escape_string($link, $author);
+    $description_sql = mysqli_real_escape_string($link, $description);
+    $total_sql = mysqli_real_escape_string($link, $total);
+    $main_file_sql = mysqli_real_escape_string($link, $main_file);
+    $uploadedBy = mysqli_real_escape_string($link, $_SESSION['username']);
+
+    // SQL to add model info to table
+    $sql = "INSERT INTO models (name, author, description, files, main_file, uploaded_by) VALUES ('$title_sql', '$author_sql', '$description_sql', '$total_sql', '$main_file_sql', '$uploadedBy')";
+
+    // TODO: generate a message of some sort depending on if the file upload was a success or fail
+            if(mysqli_query($link, $sql)){
+              $id = mysqli_insert_id($link);
+            } else {
+              //if fail
+            }
+
       for ($i = 0; $i < $total; $i++) {
 
-        // Find the file extension for renaming the file later
-        $file_type = end(explode(".",$_FILES["upload"]["name"][$i]));
-
-        // SQL escape strings to prevent SQL injection
-        $id_sql = mysqli_real_escape_string($link, $id);
-        $title_sql = mysqli_real_escape_string($link, $title);
-        $author_sql = mysqli_real_escape_string($link, $author);
-        $description_sql = mysqli_real_escape_string($link, $description);
-        $total_sql = mysqli_real_escape_string($link, $total);
-        $uploadedBy = mysqli_real_escape_string($link, $_SESSION['username']);
-
-        // SQL to add model info to table
-        $sql = "INSERT INTO models (name, author, description, files, uploaded_by)
-                VALUES ('$title_sql', '$author_sql', '$description_sql', '$total_sql', '$uploadedBy')";
-
-        // TODO: generate a message of some sort depending on if the file upload was a success or fail
-        if(mysqli_query($link, $sql)){
-          //if success;
-        } else {
-          //if fail
-        }
-
-        // Concatenate the data from earlier to generate a folder name and a target file.
-        // Files are named sequentially (0.stl, 1.stl, etc)
-        // TODO: find a way to conserve the file name
-
-        $sql = "SELECT id FROM models ORDER BY id DESC LIMIT 1";
-        $result = mysqli_query($link, $sql);
-        while ($row = mysqli_fetch_assoc($result))
-        {
-          $id = $row['id'];
-        }
-        if (empty($id)) {
-          $id = 1;
-        }
-        $file_name = $i . "." . $file_type;
+        $file_name = $_FILES["upload"]["name"][$i];
         $target_file = $target_dir . $id . "/" . $file_name;
 
         // If nothing stops the upload then move the files to their permanent home
         if ($uploadOK == 1) {
           mkdir($target_dir . $id);
-          $files[$i] = $file_name;
           move_uploaded_file($_FILES["upload"]["tmp_name"][$i], $target_file);
         }
-
       }
-
-
-
-
-
+      // Again if the upload is allowed, add the main file too
+      if ($uploadOK === 1) {
+        move_uploaded_file($_FILES["mainFile"]["tmp_name"], $target_dir . $id . "/" . $main_file);
+      }
       // Redirect to main page when completed
       header('location: ../index.php');
     }
@@ -137,6 +112,11 @@
         <textarea name="description" class="form-control" value="<?php echo $description; ?>"></textarea>
       </div>
       <div class="form-group">
+        <label> Choose Main File </label>
+        <input type="file" name="mainFile">
+      </div>
+      <div class="form-group">
+        <label> Choose All Other Files </label>
         <input type="file" name="upload[]" multiple=true>
       </div>
       <div class="form-group">
