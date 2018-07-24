@@ -8,6 +8,9 @@ var names = [];
 
 var modelList = [];
 
+loadFile = '0.stl';
+loadedFile = '';
+
 
 // JSON object of models
 var data;

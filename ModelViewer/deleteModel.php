@@ -1,12 +1,12 @@
 <?php
   require_once '../config.php';
-  session_start();
 
   $modelID = $_GET['model'];
   $uploadedBy = "";
   $username = $_SESSION['username'];
   $isAdmin = 'n';
 
+  // Get the name of the user that uploaded the file trying to be deleted
   $sql = "SELECT uploaded_by FROM models WHERE id='$modelID'";
   $result = mysqli_query($link, $sql);
   while ($row = mysqli_fetch_assoc($result))
@@ -14,6 +14,7 @@
     $uploadedBy = $row['uploaded_by'];
   }
 
+  // Determine whether the current user is an admin or not
   $sql = "SELECT admin FROM users WHERE username='$username'";
   $result = mysqli_query($link, $sql);
   while ($row = mysqli_fetch_assoc($result))

@@ -1,7 +1,6 @@
 <?php
   // Initialize the session
   require_once "config.php";
-  session_start();
 
   $message = $action = "";
 
@@ -18,7 +17,7 @@
 // TODO: only get a few models per page to increase speed
 $models = array();
 // Collect all model data from the SQL table and put it in the model array
-$sql = "SELECT id, name, author, description FROM models";
+$sql = "SELECT * FROM models";
 $result = mysqli_query($link, $sql);
 while ($row = mysqli_fetch_assoc($result))
 {
@@ -27,6 +26,8 @@ while ($row = mysqli_fetch_assoc($result))
   $model['name'] = $row['name'];
   $model['author'] = $row['author'];
   $model['description'] = $row['description'];
+  $model['uploaded_by'] = $row['uploaded_by'];
+  $model['created_at'] = $row['created_at'];
   array_push($models, $model);
 }
 
@@ -60,7 +61,8 @@ mysqli_close($link);
 
       // Iterate through every model and add DOM elements of their info
       data.forEach(function(model) {
-
+        var uploaded_by = model['uploaded_by'];
+        var created_at = model['created_at'].split(" ")[0];
         // Add event listener to add model name to seesionStorage then
         // redirect to the model viewer page
         var click = document.createElement("a");
@@ -81,16 +83,22 @@ mysqli_close($link);
         author.id = "author";
         var description = document.createElement("P");
         description.id = "description";
+        var uploaded = document.createElement("P");
+        uploaded.id = "uploaded";
+
 
         // Add text to their appropriate P elements
         title.appendChild(document.createTextNode(model["name"]));
         author.appendChild(document.createTextNode(model["author"]));
         description.appendChild(document.createTextNode(model["description"]));
+        uploaded.appendChild(document.createTextNode(model['created_at'].split(" ")[0]));
+
 
         // Put everything together
         info.appendChild(title);
         info.appendChild(author);
         info.appendChild(description);
+        info.appendChild(uploaded);
         click.appendChild(info);
         document.body.appendChild(click);
       });
