@@ -1,6 +1,4 @@
-- Show model metadata: parts, etc.
 - Download counter
-- For multiple object models, allow the viewing of different models (either all together or as different files)
 - Comments
 - Fix ParseSTL's centering and scaling functionality
 - Generate thumbnail image on upload
