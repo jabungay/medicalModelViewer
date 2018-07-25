@@ -31,6 +31,8 @@ while ($row = mysqli_fetch_assoc($result))
   $model['main_file'] = $row['main_file'];
 }
 
+$modelname = $model['name'];
+
 $username = $_SESSION['username'];
 
 $sql = "SELECT * FROM users WHERE username='$username'";
@@ -76,6 +78,7 @@ mysqli_close($link);
     <script src="/ModelViewer/scroll.js"></script>
   </head>
   <body>
+    <div class="loader" id='loader'></div>
     <ul>
       <a href="/">
         <img src="/img/Med3D_Logo_WhiteGrey.png" alt title>
@@ -83,6 +86,23 @@ mysqli_close($link);
       <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
       <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
     </ul>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <h2>Delete This Model</h2>
+        </div>
+        <div class="modal-body">
+          <div class = 'modal-control'>
+            <h class = 'modal-message'>Are you sure you want to delete "<?php echo($modelname); ?>"? This cannot be undone! </h>
+          </div>
+          <div class="modal-control">
+            <a class = "modal-button" href="deleteModel.php?model=<?php echo($modelID); ?>"> <button style="width:49%"> Yes </button> </a>
+            <button style="width:49%" onclick="document.getElementById('modal').style.display = 'none';"> No </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="model-data" id='titlebar'>
       <h class="title"> <?php echo htmlspecialchars($model['name']); ?> </h>
       <h> <?php echo htmlspecialchars($model['author']); ?>  </h>
@@ -92,10 +112,10 @@ mysqli_close($link);
       var loadedModel = <?php echo json_encode($model); ?>;
 
       if (loadedModel['uploaded_by'] === '<?php echo ($_SESSION['username']); ?>' || "<?php echo $isAdmin; ?>" === 'y') {
-        console.log("deletable");
         var del = document.createElement('button');
-        del.setAttribute('onclick', "location.href = 'deleteModel.php?model=' + loadedModel['id']");
+        // del.setAttribute('onclick', "location.href = 'deleteModel.php?model=' + loadedModel['id']");
         del.setAttribute('class', 'delete-button');
+        del.setAttribute('id', 'modal-button')
         del.innerHTML = "Delete";
         document.body.appendChild(del);
       }
@@ -124,5 +144,10 @@ mysqli_close($link);
       document.body.appendChild(fileList);
 
     </script>
+
+    <script src="../scripts/modal.js"></script>
+
+  
+
   </body>
 </html>
