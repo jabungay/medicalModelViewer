@@ -51,6 +51,10 @@ function hexToFloat(hex) {
 ********************************************/
 function loadSTL(file) {
 
+  // show loading bar
+  var loader = document.getElementById('loader');
+  loader.style.visibility = "visible";
+
   modelList = [];
 
   var offset = 84;
@@ -101,6 +105,33 @@ function loadSTL(file) {
           append(vertices, vertex);
         }
       });
+      var modelCount = int(faces / facesPerModel) + 1;
+      print(modelCount);
+        var tempModel = new p5.Geometry();
+        tempModel.gid = file + model;
+
+        var modelFaces = facesPerModel;
+        if (model === modelCount - 1) {
+          modelFaces = faces % facesPerModel;
+        }
+        var face = [];
+        for (var i = 0; i < vertices.length / 3; i++) {
+          var start = i * 3;
+          face.push(start);
+          face.push(start + 1);
+          face.push(start + 2);
+        for (var j = start; j < start + 3; j++) {
+            tempModel.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+            tempModel.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
+            tempModel.uvs.push([0,0]);
+          }
+          tempModel.faces.push(face);
+          face = [];
+        }
+        if (tempModel.vertexNormals.length === 0) {
+          tempModel.computeNormals();
+        }
+              append(modelList, tempModel);
     } else {
       faces = get4Byte(bytes, 80, true);
 
@@ -158,6 +189,10 @@ function loadSTL(file) {
       append(modelList, tempModel);
     }
   }
+
+  // hide loading animation
+  loader.style.visibility = "hidden";
+
   });
   loadedFile = loadFile;
 }
