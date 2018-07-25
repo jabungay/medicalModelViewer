@@ -46,14 +46,26 @@ function hexToFloat(hex) {
 * loadSTL: generates a p5.Geometry object from
 * an STL file.
 * @param file: the STL file
-* @modifies the result array
+* @modifies the models array
+* TODO: fix ASCII loading
 ********************************************/
 function loadSTL(file) {
+
+  // show loading bar
+  var loader = document.getElementById('loader');
+  loader.style.visibility = "visible";
+
+  modelList = [];
+
+  var offset = 84;
   var model = new p5.Geometry();
+
+  var facesPerModel = 20000;
 
   var ascii = false;
 
   var data = loadBytes(file, function(data) {
+
   var bytes = Array.from(data.bytes);
 
     // Check to see if the first 5 chars of the array are 'solid'
@@ -81,9 +93,9 @@ function loadSTL(file) {
 
           // 3x Because we have face normals but want
           // vertex normals
-          append(normals, normal);
-          append(normals, normal);
-          append(normals, normal);
+          for (var i = 0; i < 3; i++) {
+            append(normals, normal);
+          }
           faces++;
         } else if (line.includes("vertex")) {
           var vertex = [];
@@ -93,70 +105,94 @@ function loadSTL(file) {
           append(vertices, vertex);
         }
       });
-    } else {
-      faces = parseInt(get4Byte(bytes, 80, true), 16);
-      var offset = 84;
+      var modelCount = int(faces / facesPerModel) + 1;
+      print(modelCount);
+        var tempModel = new p5.Geometry();
+        tempModel.gid = file + model;
 
-      for(var face = 0; face < faces; face++) {
-        normal = [];
-        var index = offset + 50 * face;
-        append(normal, hexToFloat(get4Byte(bytes, index, true)));
-        append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
-        append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
-
-        for(var i = 0; i < 3; i++) {
-          var vertex = [];
-          var vertexStart = index + 12 + i * 12;
-          append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
-          append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
-          append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
-          append(vertices, vertex);
-          append(normals, normal);
+        var modelFaces = facesPerModel;
+        if (model === modelCount - 1) {
+          modelFaces = faces % facesPerModel;
         }
-      }
+        var face = [];
+        for (var i = 0; i < vertices.length / 3; i++) {
+          var start = i * 3;
+          face.push(start);
+          face.push(start + 1);
+          face.push(start + 2);
+        for (var j = start; j < start + 3; j++) {
+            tempModel.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+            tempModel.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
+            tempModel.uvs.push([0,0]);
+          }
+          tempModel.faces.push(face);
+          face = [];
+        }
+        if (tempModel.vertexNormals.length === 0) {
+          tempModel.computeNormals();
+        }
+              append(modelList, tempModel);
+    } else {
+      faces = get4Byte(bytes, 80, true);
+
+      var modelCount = int(faces / facesPerModel) + 1;
+
+      for (model = 0; model < modelCount; model++){
+
+        var vertices = [];
+        var normals = [];
+
+        var tempModel = new p5.Geometry();
+
+        var modelFaces = facesPerModel;
+        if (model === modelCount - 1) {
+          modelFaces = faces % facesPerModel;
+        }
+
+        for(var face = 0; face < modelFaces; face++) {
+          normal = [];
+          var index = offset + 50 * face + facesPerModel * model * 50;
+          //print(index);
+          append(normal, hexToFloat(get4Byte(bytes, index, true)));
+          append(normal, hexToFloat(get4Byte(bytes, index + 4, true)));
+          append(normal, hexToFloat(get4Byte(bytes, index + 8, true)));
+
+          for(var i = 0; i < 3; i++) {
+            var vertex = [];
+            var vertexStart = index + 12 + i * 12;
+            append(vertex, hexToFloat(get4Byte(bytes, vertexStart, true)));
+            append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 4, true)));
+            append(vertex, hexToFloat(get4Byte(bytes, vertexStart + 8, true)));
+            append(vertices, vertex);
+            append(normals, normal);
+          }
+        }
+        var face = [];
+        tempModel.gid = file + model;
+
+        for (var i = 0; i < vertices.length / 3; i++) {
+          var start = i * 3;
+          face.push(start);
+          face.push(start + 1);
+          face.push(start + 2);
+          for (var j = start; j < start + 3; j++) {
+            tempModel.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
+            tempModel.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
+            tempModel.uvs.push([0,0]);
+          }
+          tempModel.faces.push(face);
+          face = [];
+        }
+        if (tempModel.vertexNormals.length === 0) {
+          tempModel.computeNormals();
+        }
+      append(modelList, tempModel);
     }
+  }
 
-    var minCoords = createVector(vertices[0][0], vertices[0][1], vertices[0][2]);
+  // hide loading animation
+  loader.style.visibility = "hidden";
 
-    // These 2 forEach loops put the model at (0,0,0)
-    vertices.forEach(function(vertex){
-      if (vertex[0] < minCoords.x) {
-        minCoords.x = vertex[0];
-      }
-      if (vertex[1] < minCoords.y) {
-        minCoords.y = vertex[1];
-      }
-      if (vertex[2] < minCoords.z) {
-        minCoords.z = vertex[2];
-      }
-    });
-
-    vertices.forEach(function(vertex){
-      vertex[0] -= minCoords.x;
-      vertex[1] -= minCoords.y;
-      vertex[2] -= minCoords.z;
-    });
-
-    var face = [];
-    model.gid = file;
-
-    for (var i = 0; i < vertices.length / 3; i++) {
-      var start = i * 3;
-      face.push(start);
-      face.push(start + 1);
-      face.push(start + 2);
-      for (var j = start; j < start + 3; j++) {
-        model.vertices.push(createVector(vertices[j][0], vertices[j][1], vertices[j][2]));
-        model.vertexNormals.push(createVector(normals[j][0], normals[j][1], normals[j][2]));
-        model.uvs.push([0,0]);
-      }
-      model.faces.push(face);
-      face = [];
-    }
-
-    if (model.vertexNormals.length === 0) {
-      model.computeNormals();
-    }
-    });
-  return model;
+  });
+  loadedFile = loadFile;
 }

@@ -5,8 +5,8 @@ function mouseDragged() {
       modelAngle.x += (winMouseX - pwinMouseX) * .01;
       modelAngle.y += (winMouseY - pwinMouseY) * .01;
     } else if (mouseButton == RIGHT) {
-      modelPos.x += (winMouseX - pwinMouseX) * 0.1;
-      modelPos.y += (winMouseY - pwinMouseY) * 0.1;
+      modelPos.x += (winMouseX - pwinMouseX) * 0.01;
+      modelPos.y += (winMouseY - pwinMouseY) * 0.01;
     }
   }
 }

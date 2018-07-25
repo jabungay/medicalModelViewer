@@ -1,10 +1,16 @@
 // Model variables
-var loadedFile = "Splitter";
 var object;
-var modelScale = 15;
+var modelScale = 10;
 var modelAngle;
 var modelPos;
 var onModel;
+var names = [];
+
+var modelList = [];
+
+loadFile = '0.stl';
+loadedFile = '';
+
 
 // JSON object of models
 var data;
@@ -21,4 +27,4 @@ var scrollEnabled = true;
 var dropdown;
 
 // Whether or not we're local
-var currentLocation = "localhost:8080";
+var currentLocation;

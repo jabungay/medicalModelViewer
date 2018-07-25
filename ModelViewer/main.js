@@ -1,88 +1,60 @@
-function preload() {
-  data = loadJSON("/ModelViewer/data/files.json");
-}
-
-var names = [];
-
 function setup() {
-
-  btBack = createButton("Back");
-  btBack.mousePressed(function() {
-    window.location.href = "http://" + currentLocation + "/..";
-  });
-
+  // Create graphics window
+  // TODO: make it bigger
   graphics = createCanvas(window.screen.width / 3, window.screen.width / 3, WEBGL);
 
-  btDownload = createButton('Download');
-  btDownload.mousePressed(downloadFiles);
-
-  print(Object.keys(data).length);
-
-  dropdown = createSelect();
-  for (part in data) {
-    names[data[part].name] = part;
-    dropdown.option(data[part].name);
-  }
-  print(names);
-  dropdown.changed(loadFile);
-
-  btUpload = createButton("Upload File");
-  btUpload.mousePressed(uploadFiles);
-
+  // Create initial vectors to look at model
   modelPos = createVector(0, 0);
   modelAngle = createVector(5.506, 2.264);
 
   // Disable right clicking
   document.addEventListener('contextmenu', event => event.preventDefault());
 
-  object = loadSTL("/ModelViewer/data/" + "splitter" + ".stl");
-
-  print(data[names[loadedFile]]["files"][0]);
+  loadSTL("data/" + loadedModel['id'] + "/" +  loadedModel['main_file']);
 }
 
 function draw() {
-  background(55);
-
+  // Determine if the mouse is on top of the graphics window.
+  // If so, enable the camera controls
   onModel = (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height);
 
-  background(128);
-  noStroke(0);
-  ambientMaterial(121, 162, 229);
+  // Canvas colors
+  background(100,100,100);
+  noStroke();
+  ambientMaterial(122, 0, 16);
 
+  // Create the camera
   camera(0, 0, (height/2.0) / tan(PI*30.0 / 180.0), 0, 0, 0, 0, 1, 0);
 
+  // Don't let the model get too small
+  // TODO: don't let the model get too big
   if (modelScale < 1) {
     modelScale = 1;
   }
 
+  // Create 4 directional lights
+  // TODO: improve lighting
   directionalLight(250,250,250, 431, 253, 0);
   directionalLight(250,250,250, -431, 253, 0);
   directionalLight(250,250,250, -431, -253, 0);
   directionalLight(250,250,250, 431, -253, 0);
 
+  // Apply all transformations to the model
   scale(modelScale);
   translate(modelPos.x, modelPos.y);
   rotateX(modelAngle.y);
   rotateY(modelAngle.x);
 
-  model(object);
+  // Actually put the models on the screen
+  modelList.forEach(function(object){
+    model(object);
+  });
 
-  changeScroll();
-}
-
-function downloadFiles() {
-  for (var i = 0; i < data[loadedFile].files.length; i++) {
-    $.fileDownload('http://' + currentLocation + '/ModelViewer/data/' + data[loadedFile].files[i]);
+  // If we change the loaded model via HTML, load this new model
+  if (loadedFile != loadFile) {
+    loadSTL( "data/" + loadedModel['id'] +"/" + loadFile );
   }
-}
 
-// Redirect to new page for file upload
-//TODO: Look into making this a popup of some sort
-function uploadFiles() {
-  window.location.href = "http://" + currentLocation + "/ModelViewer/SelectFile";
-}
-
-function loadFile() {
-  loadedFile = dropdown.value();
-  object = loadSTL("/ModelViewer/data/" + data[names[loadedFile]]["files"][0]);
+  // Enable or disable scroll depending on where the mouse is on screen
+  changeScroll();
 }
