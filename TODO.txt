@@ -4,3 +4,5 @@
 - Generate thumbnail image on upload
 - Speed up ParseSTL
 - Refactor ALL css to improve compatibility with all displays
+- Add search functionality, as well as ability to sort files by name, date, author
+- Account page featuring list of your models
