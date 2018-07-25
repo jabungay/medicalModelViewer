@@ -29,9 +29,8 @@
       $dirname = "data/" . $modelID;
       array_map('unlink', glob("$dirname/*.*"));
       rmdir($dirname);
-      echo "File Deleted Successfully";
     }
-
+    header("location: ../index.php?d=yes");
   }
 ?>
 
