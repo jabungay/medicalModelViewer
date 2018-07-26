@@ -11,7 +11,7 @@
     $message = "LOG IN";
     $action = "login.php";
   } else {
-    $message =$_SESSION['username'];
+    $message = $_SESSION['username'];
     $action = "account.php";
 }
 
@@ -51,9 +51,7 @@ while ($row = mysqli_fetch_assoc($result))
   $model['created_at'] = $row['created_at'];
   array_push($models, $model);
 }
-
 mysqli_close($link);
-
 ?>
 
 <html>
@@ -67,6 +65,10 @@ mysqli_close($link);
     <script src="scripts/jquery-3.3.1.min.js"></script>
   </head>
   <body>
+    <div class='notify' id='notify'>
+      <span class='notify-message'>Model Deleted Successfully!</span>
+      <span class="close-button" id='close-button'>&times;</span>
+    </div>
     <ul id='top-bar'>
       <a href="/">
         <img src="img/Med3D_Logo_WhiteGrey.png" alt title>
@@ -97,7 +99,7 @@ mysqli_close($link);
               </div>
               <div class="form-group">
                 <label> Model Title </label>
-                <input type="text" name="title" class="form-control" value="<?php echo $title; ?>">
+                <input type="text" name="title" class="form-control" value="<?php echo $title; ?>" autofocus>
               </div>
               <div class="form-group">
                 <label> Author </label>
@@ -124,19 +126,24 @@ mysqli_close($link);
     <script src="scripts/modal.js"></script>
 
     <script type='text/javascript'>
-
+      // Find out what we want to sort by. If nothing is chosen, choose name
       var sortBy = "<?php echo empty($sortBy) ? 'name' : $sortBy; ?>";
-      var chosen = document.getElementById(sortBy);
-      chosen.setAttribute('selected', 'selected');
+
+      // Make the chosen option selected by default
+      try {
+        var chosen = document.getElementById(sortBy);
+        chosen.setAttribute('selected', 'selected');
+      } catch (e) {
+        document.getElementById('name').setAttribute('selected', 'selected');
+      }
 
       var sort = document.getElementById('sort');
 
+      // Redirect to appropriate page if the user wants to change sorting method
       sort.onchange = function() {
         var sortBy = this.value;
         location.href = "index.php?sort=" + sortBy;
       }
-
-
 
       // Get model data and store in an array
       var data = <?php echo(json_encode($models)); ?>;
@@ -145,8 +152,6 @@ mysqli_close($link);
       data.forEach(function(model) {
         var uploaded_by = model['uploaded_by'];
         var created_at = model['created_at'].split(" ")[0];
-        // Add event listener to add model name to seesionStorage then
-        // redirect to the model viewer page
 
         // Add div to store all text
         var info = document.createElement("DIV");
@@ -183,6 +188,18 @@ mysqli_close($link);
         info.appendChild(uploaded);
         document.body.appendChild(info);
       });
+    </script>
+
+    <script>
+      var deleted = "<?php echo empty($_SESSION['deleted']) ? 'no' : $_SESSION['deleted']; ?>";
+
+      if (deleted === 'yes') {
+        document.getElementById('notify').style.visibility = 'visible';
+        document.getElementById('close-button').addEventListener('click', function() {
+          document.getElementById('notify').style.visibility = 'hidden';
+        });
+        <?php $_SESSION['deleted'] = 'no'; ?>
+      }
     </script>
 
     <script>
