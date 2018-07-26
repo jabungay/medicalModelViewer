@@ -84,7 +84,7 @@ mysqli_close($link);
         <img src="/img/Med3D_Logo_WhiteGrey.png" alt title>
       </a>
       <li><a href=<?php echo htmlspecialchars($action); ?>> <?php echo htmlspecialchars($message); ?> </a> </li>
-      <li><a  href="/ModelViewer/uploadModel.php">UPLOAD</a></li>
+      <li><a  href="/ModelViewer/upload.php">UPLOAD</a></li>
     </ul>
     <div id="modal" class="modal">
       <div class="modal-content">
@@ -106,18 +106,25 @@ mysqli_close($link);
     <div class="model-data" id='titlebar'>
       <h class="title"> <?php echo htmlspecialchars($model['name']); ?> </h>
       <h> <?php echo htmlspecialchars($model['author']); ?>  </h>
-      <button onclick= "location.href = 'download.php?model=' + loadedModel['id']" class=download-button> Download </a>
+      <button onclick= "location.href = 'download.php?model=' + loadedModel['id']" class=titlebar-button> Download </button>
     </div>
     <script type="text/javascript">
       var loadedModel = <?php echo json_encode($model); ?>;
 
       if (loadedModel['uploaded_by'] === '<?php echo ($_SESSION['username']); ?>' || "<?php echo $isAdmin; ?>" === 'y') {
+        var titlebar = document.getElementById('titlebar');
+
         var del = document.createElement('button');
-        // del.setAttribute('onclick', "location.href = 'deleteModel.php?model=' + loadedModel['id']");
-        del.setAttribute('class', 'delete-button');
         del.setAttribute('id', 'modal-button')
+        del.setAttribute('class', 'titlebar-button');
         del.innerHTML = "Delete";
-        document.body.appendChild(del);
+        titlebar.appendChild(del);
+
+        var edit = document.createElement('button');
+        edit.setAttribute('onclick', 'location.href= "edit.php?model=" + loadedModel["id"]');
+        edit.setAttribute('class', 'titlebar-button');
+        edit.innerHTML = 'Edit';
+        titlebar.appendChild(edit);
       }
 
       var files = <?php echo(json_encode($models)); ?>;
@@ -137,8 +144,9 @@ mysqli_close($link);
         fileName.id = "fileName";
 
         fileName.appendChild(document.createTextNode(file));
-
         box.appendChild(fileName);
+
+
         fileList.appendChild(box);
       });
       document.body.appendChild(fileList);
@@ -147,7 +155,7 @@ mysqli_close($link);
 
     <script src="../scripts/modal.js"></script>
 
-  
+
 
   </body>
 </html>
