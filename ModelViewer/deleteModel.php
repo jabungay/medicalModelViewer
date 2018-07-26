@@ -30,8 +30,10 @@
       array_map('unlink', glob("$dirname/*.*"));
       rmdir($dirname);
     }
-    header("location: ../index.php?d=yes");
+    $_SESSION['deleted'] = 'yes';
+    header("location: ../index.php");
   }
+  header("location: ../index.php");
 ?>
 
 
